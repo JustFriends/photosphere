@@ -18,4 +18,4 @@ With this app we hope to create a way for users to view the world in different l
 
 # Wireframe
 
-[](res/Wireframe.png)
+![](/res/Wireframe.png)
