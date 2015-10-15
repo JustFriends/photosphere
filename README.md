@@ -1,1 +1,15 @@
 # photosphere
+With this app we hope to create a way for users to view the world in different locations as well as different time periods. By selecting a geographic (or their current location) a user will be able to pull up and view photospheres as well as other media corresponding to that location. 
+
+# User Stories
+
+### Required
+- [ ] User is able to call up and view photospheres of a specified location
+- [ ] User is able to scroll through a timeline of previous photospheres and other media corresponding to the current location
+- [ ] User is able to view their current position on a map
+- [ ] User is able to view locations of nearby points of interest (landmarks, notable historic media, etc.)
+- [ ] User is able to drag a pin to more accurately designate their current position (as well as virtually visit other locations)
+
+### Optional
+- [ ] Motion of the user's device translates to motion of the virtual camera
+- [ ] Find a way to pull data from [WhatWasThere](http://www.whatwasthere.com/default.aspx)
