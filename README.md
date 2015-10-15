@@ -15,3 +15,7 @@ With this app we hope to create a way for users to view the world in different l
 - [ ] Find a way to pull data from [WhatWasThere](http://www.whatwasthere.com/default.aspx)
 - [ ] User is able to share current photosphere view and other users will be able to view it in the timeline of photosphere.
 - [ ] User is able to pull up historical Google street views of a given location.
+
+# Wireframe
+
+[](res/Wireframe.png)
