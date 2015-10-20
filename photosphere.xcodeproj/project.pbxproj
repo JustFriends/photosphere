@@ -1,0 +1,377 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BB3F0DF01BD630DA00B4E75B /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3F0DEF1BD630DA00B4E75B /* APIKeys.swift */; settings = {ASSET_TAGS = (); }; };
+		BB3F0DF21BD6312C00B4E75B /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB3F0DF11BD6312C00B4E75B /* APIKeys.plist */; settings = {ASSET_TAGS = (); }; };
+		BB816F271BD62F2D00AEB09D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB816F261BD62F2D00AEB09D /* AppDelegate.swift */; };
+		BB816F291BD62F2D00AEB09D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB816F281BD62F2D00AEB09D /* ViewController.swift */; };
+		BB816F2C1BD62F2D00AEB09D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB816F2A1BD62F2D00AEB09D /* Main.storyboard */; };
+		BB816F2E1BD62F2D00AEB09D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB816F2D1BD62F2D00AEB09D /* Assets.xcassets */; };
+		BB816F311BD62F2D00AEB09D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB816F2F1BD62F2D00AEB09D /* LaunchScreen.storyboard */; };
+		FD1983FD9B7D22F1D1BF3227 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B13C190C840FBEFA3008C4C /* libPods.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0B13C190C840FBEFA3008C4C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DB82F6DA2BDCF031E15918E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		BB3F0DEF1BD630DA00B4E75B /* APIKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
+		BB3F0DF11BD6312C00B4E75B /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
+		BB816F231BD62F2D00AEB09D /* photosphere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = photosphere.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB816F261BD62F2D00AEB09D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BB816F281BD62F2D00AEB09D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		BB816F2B1BD62F2D00AEB09D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BB816F2D1BD62F2D00AEB09D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BB816F301BD62F2D00AEB09D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BB816F321BD62F2D00AEB09D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F722BF38DAABFBEED34BD537 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BB816F201BD62F2D00AEB09D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD1983FD9B7D22F1D1BF3227 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4BEBA5759E836995B4782368 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0B13C190C840FBEFA3008C4C /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B7161EA85B0BFD257207CC77 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6DB82F6DA2BDCF031E15918E /* Pods.debug.xcconfig */,
+				F722BF38DAABFBEED34BD537 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BB3F0DF31BD6313700B4E75B /* API Keys */ = {
+			isa = PBXGroup;
+			children = (
+				BB3F0DEF1BD630DA00B4E75B /* APIKeys.swift */,
+				BB3F0DF11BD6312C00B4E75B /* APIKeys.plist */,
+			);
+			name = "API Keys";
+			sourceTree = "<group>";
+		};
+		BB816F1A1BD62F2D00AEB09D = {
+			isa = PBXGroup;
+			children = (
+				BB816F251BD62F2D00AEB09D /* photosphere */,
+				BB816F241BD62F2D00AEB09D /* Products */,
+				B7161EA85B0BFD257207CC77 /* Pods */,
+				4BEBA5759E836995B4782368 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		BB816F241BD62F2D00AEB09D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BB816F231BD62F2D00AEB09D /* photosphere.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BB816F251BD62F2D00AEB09D /* photosphere */ = {
+			isa = PBXGroup;
+			children = (
+				BB3F0DF31BD6313700B4E75B /* API Keys */,
+				BB816F261BD62F2D00AEB09D /* AppDelegate.swift */,
+				BB816F281BD62F2D00AEB09D /* ViewController.swift */,
+				BB816F2A1BD62F2D00AEB09D /* Main.storyboard */,
+				BB816F2F1BD62F2D00AEB09D /* LaunchScreen.storyboard */,
+				BB816F2D1BD62F2D00AEB09D /* Assets.xcassets */,
+				BB816F321BD62F2D00AEB09D /* Info.plist */,
+			);
+			path = photosphere;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BB816F221BD62F2D00AEB09D /* photosphere */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB816F351BD62F2D00AEB09D /* Build configuration list for PBXNativeTarget "photosphere" */;
+			buildPhases = (
+				C9574D19822E6FB0167DFDDB /* Check Pods Manifest.lock */,
+				BB816F1F1BD62F2D00AEB09D /* Sources */,
+				BB816F201BD62F2D00AEB09D /* Frameworks */,
+				BB816F211BD62F2D00AEB09D /* Resources */,
+				F04362BB0E583D5332FFDB35 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = photosphere;
+			productName = photosphere;
+			productReference = BB816F231BD62F2D00AEB09D /* photosphere.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BB816F1B1BD62F2D00AEB09D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Kenneth Pu";
+				TargetAttributes = {
+					BB816F221BD62F2D00AEB09D = {
+						CreatedOnToolsVersion = 7.0.1;
+						DevelopmentTeam = 62U98MY9NL;
+					};
+				};
+			};
+			buildConfigurationList = BB816F1E1BD62F2D00AEB09D /* Build configuration list for PBXProject "photosphere" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BB816F1A1BD62F2D00AEB09D;
+			productRefGroup = BB816F241BD62F2D00AEB09D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BB816F221BD62F2D00AEB09D /* photosphere */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BB816F211BD62F2D00AEB09D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB816F311BD62F2D00AEB09D /* LaunchScreen.storyboard in Resources */,
+				BB3F0DF21BD6312C00B4E75B /* APIKeys.plist in Resources */,
+				BB816F2E1BD62F2D00AEB09D /* Assets.xcassets in Resources */,
+				BB816F2C1BD62F2D00AEB09D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C9574D19822E6FB0167DFDDB /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F04362BB0E583D5332FFDB35 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BB816F1F1BD62F2D00AEB09D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB3F0DF01BD630DA00B4E75B /* APIKeys.swift in Sources */,
+				BB816F291BD62F2D00AEB09D /* ViewController.swift in Sources */,
+				BB816F271BD62F2D00AEB09D /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BB816F2A1BD62F2D00AEB09D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB816F2B1BD62F2D00AEB09D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		BB816F2F1BD62F2D00AEB09D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB816F301BD62F2D00AEB09D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BB816F331BD62F2D00AEB09D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		BB816F341BD62F2D00AEB09D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BB816F361BD62F2D00AEB09D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6DB82F6DA2BDCF031E15918E /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = photosphere/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = kpu.photosphere;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Debug;
+		};
+		BB816F371BD62F2D00AEB09D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F722BF38DAABFBEED34BD537 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = photosphere/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = kpu.photosphere;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BB816F1E1BD62F2D00AEB09D /* Build configuration list for PBXProject "photosphere" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB816F331BD62F2D00AEB09D /* Debug */,
+				BB816F341BD62F2D00AEB09D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BB816F351BD62F2D00AEB09D /* Build configuration list for PBXNativeTarget "photosphere" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB816F361BD62F2D00AEB09D /* Debug */,
+				BB816F371BD62F2D00AEB09D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BB816F1B1BD62F2D00AEB09D /* Project object */;
+}
