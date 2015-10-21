@@ -31,3 +31,6 @@ DerivedData
 # Carthage/Checkouts
 
 Carthage/Build
+
+# API Keys
+APIKeys.plist
