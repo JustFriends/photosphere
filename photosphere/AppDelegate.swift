@@ -16,8 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-        GMSServices .provideAPIKey("AIzaSyCLTtqiuYC1ee9STNzCTlRLapn8iciycOs")
+        let kGoogleAPIKey = valueForAPIKey("GOOGLE_API_KEY")
+        GMSServices.provideAPIKey(kGoogleAPIKey)
         return true
     }
 
