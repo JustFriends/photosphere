@@ -19,3 +19,8 @@ With this app we hope to create a way for users to view the world in different l
 # Wireframe
 
 ![](/res/Wireframe.png)
+
+# Video Walkthrough
+This is only the first two screens and isn't a lot for sprint 1... We struggled a bit with getting things to work via storyboards so ended up setting things programmatically. Will revisit and spend (a lot) more time this coming sprint.
+
+![Video Walkthrough](/res/photosphere_sprint1.gif)
