@@ -31,3 +31,9 @@ DerivedData
 # Carthage/Checkouts
 
 Carthage/Build
+
+# Mac
+*.DS_Store
+
+# API Keys
+APIKeys.plist
