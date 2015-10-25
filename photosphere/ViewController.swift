@@ -10,32 +10,44 @@ import UIKit
 import GoogleMaps
 
 class ViewController: UIViewController, GMSMapViewDelegate {
+    var panoView: GMSPanoramaView!
+    var sliderView: UISlider!
     
-    
-    @IBOutlet weak var bottomView: UIView!
+    let sliderOffsetX: CGFloat = 50
+    let sliderOffsetY: CGFloat = 40
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //TODO: use auto layout constraints instead of frame... maybe frame
+        panoView = GMSPanoramaView()
+        self.view.addSubview(panoView)
         
-        var panoView = GMSPanoramaView(frame: self.view.frame)
+        //TODO: move this out to function
         panoView.moveNearCoordinate(CLLocationCoordinate2DMake(-33.732, 150.312))
         
+        
         //TODO: hook up target
-        var slider = UISlider(frame: CGRectMake(150, 280, self.view.frame.width * 0.5, 20)) //TODO: customize slider
+        sliderView = UISlider()
+        self.view.addSubview(sliderView)
         
         // TODO: stylez
-        var mapButton = UIButton(type: UIButtonType.System)
-        mapButton.frame = CGRectMake(500, 10, 40, 40)
-        mapButton.backgroundColor = UIColor.blueColor()
-        mapButton.setTitle("Map", forState: UIControlState.Normal)
-        mapButton.addTarget(self, action: "onMapClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        //        var mapButton = UIButton(type: UIButtonType.System)
+        //        mapButton.frame = CGRectMake(500, 10, 40, 40)
+        //        mapButton.backgroundColor = UIColor.blueColor()
+        //        mapButton.setTitle("Map", forState: UIControlState.Normal)
+        //        mapButton.addTarget(self, action: "onMapClicked:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        self.view.addSubview(panoView)
-        self.view.addSubview(slider)
-        self.view.addSubview(mapButton)
         
+        
+        //        self.view.addSubview(mapButton)
+        
+    }
+    
+    override func viewWillLayoutSubviews() {
+        panoView.frame = self.view.bounds
+        
+        sliderView.frame = CGRectMake(CGRectGetMinX(self.view.bounds) + sliderOffsetX, CGRectGetMaxY(self.view.bounds) - sliderOffsetY,
+            self.view.bounds.width - 2 * sliderOffsetX, 15)
     }
     
     override func didReceiveMemoryWarning() {
@@ -50,6 +62,14 @@ class ViewController: UIViewController, GMSMapViewDelegate {
         self.presentViewController(mapViewController, animated: true, completion: nil)
         //navigationController?.pushViewController("MapViewController", animated: true)
         
+    }
+    
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.All
+    }
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        self.view.setNeedsLayout()
     }
 }
 
