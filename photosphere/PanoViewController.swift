@@ -11,7 +11,6 @@ import GoogleMaps
 
 class PanoViewController: UIViewController, GMSMapViewDelegate {
     
-    
     @IBOutlet weak var bottomView: UIView!
     
     override func viewDidLoad() {

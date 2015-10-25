@@ -12,9 +12,12 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
     var scrollView: UIScrollView!
     var imageView: UIImageView!
     var pageControl: UIPageControl!
-
+    var panoViewController: PanoViewController!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        panoViewController = PanoViewController()
         
         scrollView = UIScrollView(frame: view.bounds)
         
@@ -51,6 +54,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
         pageControl.numberOfPages = 3
         
         pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
+        
+        setupGestureRecognizer()
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,6 +70,34 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.bounds.width)
+    }
+    
+    // MARK: - Gesture Recognizer
+    func setupGestureRecognizer() {
+        let tap = UITapGestureRecognizer(target: self, action: "handleTap:")
+        tap.numberOfTapsRequired = 2
+        scrollView.addGestureRecognizer(tap)
+    }
+    
+    func handleTap(recognizer: UITapGestureRecognizer) {
+        print("tapped")
+        self.presentViewController(panoViewController, animated: true, completion: nil)
+    }
+    
+    
+    // MARK: - Zooming: http://www.appcoda.com/uiscrollview-introduction/
+    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+        return imageView
+    }
+    
+    func setZoomScale() {
+        let imageViewSize = imageView.bounds.size
+        let scrollViewSize = scrollView.bounds.size
+        let widthScale = scrollViewSize.width / imageViewSize.width
+        let heightScale = scrollViewSize.height / imageViewSize.height
+        
+        scrollView.minimumZoomScale = min(widthScale, heightScale)
+        scrollView.zoomScale = 1.0
     }
 
     /*
