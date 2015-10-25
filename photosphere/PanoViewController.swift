@@ -9,7 +9,7 @@
 import UIKit
 import GoogleMaps
 
-class ViewController: UIViewController, GMSMapViewDelegate {
+class PanoViewController: UIViewController, GMSMapViewDelegate {
     
     
     @IBOutlet weak var bottomView: UIView!

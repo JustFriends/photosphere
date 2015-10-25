@@ -8,25 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		7D880C5D1E4070FDFAB1DE60 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74AC1516C923A23819B8EF8B /* libPods.a */; };
-		BB3F0DF61BD8BE1000B4E75B /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3F0DF51BD8BE1000B4E75B /* APIKeys.swift */; settings = {ASSET_TAGS = (); }; };
-		BB3F0DF81BD8BF3C00B4E75B /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB3F0DF71BD8BF3C00B4E75B /* APIKeys.plist */; settings = {ASSET_TAGS = (); }; };
+		9F610BB31BDD5B4D00AB8B38 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F610BB21BDD5B4D00AB8B38 /* APIKeys.plist */; };
+		9F610BB51BDD5D5D00AB8B38 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F610BB41BDD5D5D00AB8B38 /* ScrollViewController.swift */; };
+		9F610BB71BDD9A0900AB8B38 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F610BB61BDD9A0900AB8B38 /* ScrollView.swift */; };
+		BB3F0DF61BD8BE1000B4E75B /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3F0DF51BD8BE1000B4E75B /* APIKeys.swift */; };
 		DA2E84E81BD5B3EA0006ED8C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E84E71BD5B3EA0006ED8C /* AppDelegate.swift */; };
-		DA2E84EA1BD5B3EA0006ED8C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E84E91BD5B3EA0006ED8C /* ViewController.swift */; };
+		DA2E84EA1BD5B3EA0006ED8C /* PanoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E84E91BD5B3EA0006ED8C /* PanoViewController.swift */; };
 		DA2E84ED1BD5B3EA0006ED8C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA2E84EB1BD5B3EA0006ED8C /* Main.storyboard */; };
 		DA2E84EF1BD5B3EA0006ED8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA2E84EE1BD5B3EA0006ED8C /* Assets.xcassets */; };
 		DA2E84F21BD5B3EA0006ED8C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA2E84F01BD5B3EA0006ED8C /* LaunchScreen.storyboard */; };
-		DAD57F9B1BD634CF00D4A43B /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD57F9A1BD634CF00D4A43B /* MapViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		DAD57F9B1BD634CF00D4A43B /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD57F9A1BD634CF00D4A43B /* MapViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		025923A6ED354FB7982E722B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		58F082AC389DD6DF27A23221 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		74AC1516C923A23819B8EF8B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F610BB21BDD5B4D00AB8B38 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = APIKeys.plist; path = ../APIKeys.plist; sourceTree = "<group>"; };
+		9F610BB41BDD5D5D00AB8B38 /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
+		9F610BB61BDD9A0900AB8B38 /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		BB3F0DF51BD8BE1000B4E75B /* APIKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
-		BB3F0DF71BD8BF3C00B4E75B /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
 		DA2E84E41BD5B3EA0006ED8C /* photosphere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = photosphere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA2E84E71BD5B3EA0006ED8C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		DA2E84E91BD5B3EA0006ED8C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DA2E84E91BD5B3EA0006ED8C /* PanoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanoViewController.swift; sourceTree = "<group>"; };
 		DA2E84EC1BD5B3EA0006ED8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DA2E84EE1BD5B3EA0006ED8C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DA2E84F11BD5B3EA0006ED8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -63,10 +67,18 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		9F610BB81BDD9A1100AB8B38 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9F610BB61BDD9A0900AB8B38 /* ScrollView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		BB3F0DF41BD8BDFA00B4E75B /* API Keys */ = {
 			isa = PBXGroup;
 			children = (
-				BB3F0DF71BD8BF3C00B4E75B /* APIKeys.plist */,
+				9F610BB21BDD5B4D00AB8B38 /* APIKeys.plist */,
 				BB3F0DF51BD8BE1000B4E75B /* APIKeys.swift */,
 			);
 			name = "API Keys";
@@ -94,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				BB3F0DF41BD8BDFA00B4E75B /* API Keys */,
+				9F610BB81BDD9A1100AB8B38 /* View */,
 				DAD57F991BD6342800D4A43B /* ViewControllers */,
 				DA2E84E71BD5B3EA0006ED8C /* AppDelegate.swift */,
 				DA2E84EB1BD5B3EA0006ED8C /* Main.storyboard */,
@@ -107,7 +120,8 @@
 		DAD57F991BD6342800D4A43B /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				DA2E84E91BD5B3EA0006ED8C /* ViewController.swift */,
+				9F610BB41BDD5D5D00AB8B38 /* ScrollViewController.swift */,
+				DA2E84E91BD5B3EA0006ED8C /* PanoViewController.swift */,
 				DAD57F9A1BD634CF00D4A43B /* MapViewController.swift */,
 			);
 			name = ViewControllers;
@@ -141,6 +155,7 @@
 		DA2E84DC1BD5B3EA0006ED8C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = CodePath;
 				TargetAttributes = {
@@ -173,7 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA2E84F21BD5B3EA0006ED8C /* LaunchScreen.storyboard in Resources */,
-				BB3F0DF81BD8BF3C00B4E75B /* APIKeys.plist in Resources */,
+				9F610BB31BDD5B4D00AB8B38 /* APIKeys.plist in Resources */,
 				DA2E84EF1BD5B3EA0006ED8C /* Assets.xcassets in Resources */,
 				DA2E84ED1BD5B3EA0006ED8C /* Main.storyboard in Resources */,
 			);
@@ -219,10 +234,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA2E84EA1BD5B3EA0006ED8C /* ViewController.swift in Sources */,
+				DA2E84EA1BD5B3EA0006ED8C /* PanoViewController.swift in Sources */,
 				DAD57F9B1BD634CF00D4A43B /* MapViewController.swift in Sources */,
+				9F610BB51BDD5D5D00AB8B38 /* ScrollViewController.swift in Sources */,
 				BB3F0DF61BD8BE1000B4E75B /* APIKeys.swift in Sources */,
 				DA2E84E81BD5B3EA0006ED8C /* AppDelegate.swift in Sources */,
+				9F610BB71BDD9A0900AB8B38 /* ScrollView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
