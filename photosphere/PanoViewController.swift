@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  PanoViewController.swift
 //  photosphere
 //
 //  Created by Xuefan Zhang on 10/19/15.
@@ -10,33 +10,29 @@ import UIKit
 import GoogleMaps
 import CoreMotion
 
-class ViewController: UIViewController, GMSMapViewDelegate {
+class PanoViewController: UIViewController, GMSMapViewDelegate {
     
+    /** Panorama Viewer **/
     var panoView: GMSPanoramaView!
     
+    /** UISlider Constants **/
     var sliderView: UISlider!
     let sliderOffsetX: CGFloat = 50
     let sliderOffsetY: CGFloat = 40
     let sliderHeight: CGFloat = 15
     
+    /** Core Motion **/
     var motionManager: CMMotionManager!
+    let FRAMES_PER_SECOND: Double = 30.0
     
     let YAW_DIFF_THRESHOLD = 0.21
     var lastYaw = 0.0
     var viewerYaw = 0.0
-    
-    let FRAMES_PER_SECOND: Double = 30.0
-    
+
+    var coordinate: CLLocationCoordinate2D?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        panoView = GMSPanoramaView()
-        panoView.streetNamesHidden = true
-        panoView.navigationLinksHidden = true
-        self.view.addSubview(panoView)
-
-        //TODO: move this out to function
-//        panoView.moveNearCoordinate(CLLocationCoordinate2DMake(-33.732, 150.312))
         
         // Ferry Building (37.7944876,-122.3948276)
 //        let panoramaNear = CLLocationCoordinate2DMake(37.7944876,-122.3948276)
@@ -56,7 +52,7 @@ class ViewController: UIViewController, GMSMapViewDelegate {
 //        panoView.moveToPanoramaID("SoMjaYiGi_ptXjWI775K6g") // Jul 2015
         
         // 8th & Harrison (37.7737729,-122.408536)
-        panoView.moveToPanoramaID("8M0oSy72ZpFk4J3un7SP_Q") // Nov 2007
+//        panoView.moveToPanoramaID("8M0oSy72ZpFk4J3un7SP_Q") // Nov 2007
 //        panoView.moveToPanoramaID("AAjXHanNaa7Dtqg2EJVeJw") // Jul 2009
 //        panoView.moveToPanoramaID("iomOIUdQxOrEDNwCcYZezA") // Feb 2011
 //        panoView.moveToPanoramaID("lr1iiI-kK-y2xh21Y-_2-Q") // May 2013
@@ -68,19 +64,29 @@ class ViewController: UIViewController, GMSMapViewDelegate {
 //        panoView.moveToPanoramaID("IghRrTimM7EWs47efin2Rw") // Feb 2015
 //        panoView.moveToPanoramaID("EqOQAAniB8iN0lhbBH6UtQ") // Jun 2015
 //        panoView.moveToPanoramaID("1ZtbDdNk9WVQdpg21IFSsg") // Jul 2015
+        
+        // Initialize panorama viewer
+        panoView = GMSPanoramaView()
+        panoView.streetNamesHidden = true
+        panoView.navigationLinksHidden = true
+        self.view.addSubview(panoView)
+        
+        if (coordinate != nil) {
+            panoView.moveNearCoordinate(coordinate!)
+        } else {
+            panoView.moveNearCoordinate(CLLocationCoordinate2DMake(-33.732, 150.312))
+        }
 
-        //TODO: hook up target
+        // Initialize UISlider
         sliderView = UISlider()
         self.view.addSubview(sliderView)
     }
 
     override func viewWillLayoutSubviews() {
         panoView.frame = self.view.bounds
-//        self.view.addSubview(panoView)
         
         sliderView.frame = CGRectMake(CGRectGetMinX(self.view.bounds) + sliderOffsetX, CGRectGetMaxY(self.view.bounds) - sliderOffsetY,
             self.view.bounds.width - 2 * sliderOffsetX, sliderHeight)
-//        self.view.addSubview(slider)
         
         motionManager = CMMotionManager()
         if motionManager?.deviceMotionAvailable == true {
@@ -91,10 +97,13 @@ class ViewController: UIViewController, GMSMapViewDelegate {
             motionManager?.startDeviceMotionUpdatesUsingReferenceFrame(CMAttitudeReferenceFrame.XArbitraryCorrectedZVertical, toQueue: queue, withHandler: { [weak self] (motion, error) -> Void in
                 
                 // Get the attitude of the device
-                if let attitude = motion?.attitude {
-                    var roll = attitude.roll * 180.0/M_PI
-                    var pitch = attitude.pitch * 180.0/M_PI
-                    var yaw = -attitude.yaw * 180.0/M_PI
+                let attitude = motion?.attitude
+                let gravity = motion?.gravity
+                if (attitude != nil && gravity != nil) {
+                    var gx = gravity!.x > 0 ? 1.0 : -1.0
+                    var roll = attitude!.roll * 180.0/M_PI
+                    var pitch = attitude!.pitch * 180.0/M_PI
+                    var yaw = -attitude!.yaw * 180.0/M_PI
                     
                     if self!.lastYaw == 0 {
                         self!.lastYaw = yaw
@@ -116,14 +125,15 @@ class ViewController: UIViewController, GMSMapViewDelegate {
                     
                     var yawDiff = yaw - self!.lastYaw
                     if (fabs(yawDiff) > self!.YAW_DIFF_THRESHOLD) {
-                        self!.viewerYaw += yawDiff + self!.YAW_DIFF_THRESHOLD
+                        self!.viewerYaw += yawDiff + gx * self!.YAW_DIFF_THRESHOLD
                     }
                     self!.lastYaw = yaw
                     
                     dispatch_async(dispatch_get_main_queue()) {
-//                        print("r:\(roll), p:\(pitch), y:\(x)")
+//                        print("r:\(roll), p:\(pitch), y:\(self!.viewerYaw)")
+//                        print("gx:\(motion!.gravity.x), gy:\(motion!.gravity.y), gz:\(motion!.gravity.z)")
                         
-                        self!.panoView.camera = GMSPanoramaCamera(heading: self!.viewerYaw, pitch:roll - 90, zoom:1)
+                        self!.panoView.camera = GMSPanoramaCamera(heading: self!.viewerYaw, pitch:gx*roll - 90, zoom:1)
                     }
                 }
             })
