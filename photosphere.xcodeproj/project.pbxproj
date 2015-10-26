@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		7D880C5D1E4070FDFAB1DE60 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74AC1516C923A23819B8EF8B /* libPods.a */; };
-		9F610BB31BDD5B4D00AB8B38 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F610BB21BDD5B4D00AB8B38 /* APIKeys.plist */; };
 		9F610BB51BDD5D5D00AB8B38 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F610BB41BDD5D5D00AB8B38 /* ScrollViewController.swift */; };
 		9F610BB71BDD9A0900AB8B38 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F610BB61BDD9A0900AB8B38 /* ScrollView.swift */; };
+		9F610BBA1BDDA14900AB8B38 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F610BB91BDDA14900AB8B38 /* APIKeys.plist */; };
 		BB3F0DF61BD8BE1000B4E75B /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3F0DF51BD8BE1000B4E75B /* APIKeys.swift */; };
 		DA2E84E81BD5B3EA0006ED8C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E84E71BD5B3EA0006ED8C /* AppDelegate.swift */; };
 		DA2E84EA1BD5B3EA0006ED8C /* PanoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E84E91BD5B3EA0006ED8C /* PanoViewController.swift */; };
@@ -24,9 +24,9 @@
 		025923A6ED354FB7982E722B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		58F082AC389DD6DF27A23221 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		74AC1516C923A23819B8EF8B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		9F610BB21BDD5B4D00AB8B38 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = APIKeys.plist; path = ../APIKeys.plist; sourceTree = "<group>"; };
 		9F610BB41BDD5D5D00AB8B38 /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
 		9F610BB61BDD9A0900AB8B38 /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
+		9F610BB91BDDA14900AB8B38 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
 		BB3F0DF51BD8BE1000B4E75B /* APIKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		DA2E84E41BD5B3EA0006ED8C /* photosphere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = photosphere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA2E84E71BD5B3EA0006ED8C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -78,8 +78,8 @@
 		BB3F0DF41BD8BDFA00B4E75B /* API Keys */ = {
 			isa = PBXGroup;
 			children = (
-				9F610BB21BDD5B4D00AB8B38 /* APIKeys.plist */,
 				BB3F0DF51BD8BE1000B4E75B /* APIKeys.swift */,
+				9F610BB91BDDA14900AB8B38 /* APIKeys.plist */,
 			);
 			name = "API Keys";
 			sourceTree = "<group>";
@@ -188,7 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA2E84F21BD5B3EA0006ED8C /* LaunchScreen.storyboard in Resources */,
-				9F610BB31BDD5B4D00AB8B38 /* APIKeys.plist in Resources */,
+				9F610BBA1BDDA14900AB8B38 /* APIKeys.plist in Resources */,
 				DA2E84EF1BD5B3EA0006ED8C /* Assets.xcassets in Resources */,
 				DA2E84ED1BD5B3EA0006ED8C /* Main.storyboard in Resources */,
 			);

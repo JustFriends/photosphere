@@ -75,7 +75,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
     // MARK: - Gesture Recognizer
     func setupGestureRecognizer() {
         let tap = UITapGestureRecognizer(target: self, action: "handleTap:")
-        tap.numberOfTapsRequired = 2
+        tap.numberOfTapsRequired = 1
         scrollView.addGestureRecognizer(tap)
     }
     
