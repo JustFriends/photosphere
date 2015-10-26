@@ -9,19 +9,26 @@
 import UIKit
 import GoogleMaps
 
-class MapViewController: UIViewController {
+protocol MapViewControllerDelegate {
+    func mapViewController(mapViewcontroller: MapViewController!, didDismissWithCoordinate coordinate: CLLocationCoordinate2D)
+}
+
+class MapViewController: UIViewController, GMSMapViewDelegate {
+    
+    var delegate: MapViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // TODO: currently hardcoding location. no more :(
-        var camera = GMSCameraPosition.cameraWithLatitude(-33.732,
+        let camera = GMSCameraPosition.cameraWithLatitude(-33.732,
             longitude: 150.312, zoom: 14)
-        var mapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
+        let mapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
+        mapView.delegate = self;
         mapView.myLocationEnabled = true
         self.view = mapView
         
-        var marker = GMSMarker()
+        let marker = GMSMarker()
         marker.position = CLLocationCoordinate2DMake(-33.732, 150.312)
         marker.title = "Sydney"
         marker.snippet = "Australia"
@@ -33,6 +40,10 @@ class MapViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
+        self.delegate?.mapViewController(self, didDismissWithCoordinate: coordinate)
+        self.dismissViewControllerAnimated(true, completion: nil)   //TODO: do we really want to dismiss it?
+    }
 
     /*
     // MARK: - Navigation
