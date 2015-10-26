@@ -13,12 +13,38 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
     var imageView: UIImageView!
     var pageControl: UIPageControl!
     var panoViewController: PanoViewController!
+    var mapViewController: MapViewController!
+    var mapsButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         panoViewController = PanoViewController()
+        mapViewController = MapViewController()
+
+        setupScrollView()
+        setupGestureRecognizer()
+        setupPageControl()
+        setupMapsButton()
         
+        //mapsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    func pageControlDidPage(sender: AnyObject) {
+        let xOffset = scrollView.bounds.width * CGFloat(pageControl.currentPage)
+        scrollView.setContentOffset(CGPointMake(xOffset,0) , animated: true)
+    }
+
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.bounds.width)
+    }
+
+    func setupScrollView() {
         scrollView = UIScrollView(frame: view.bounds)
         
         let contentWidth = scrollView.bounds.width
@@ -50,26 +76,33 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
         scrollView.addSubview(view3)
         
         scrollView.delegate = self
-        
-        pageControl.numberOfPages = 3
-        
-        pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
-        
-        setupGestureRecognizer()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func setupPageControl() {
+        pageControl.numberOfPages = 3
+        pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
     }
     
-    func pageControlDidPage(sender: AnyObject) {
-        let xOffset = scrollView.bounds.width * CGFloat(pageControl.currentPage)
-        scrollView.setContentOffset(CGPointMake(xOffset,0) , animated: true)
+    func setupMapsButton() {
+        let screenWidth = self.view.frame.size.width
+        let size = CGFloat(60)
+        let frame = CGRectMake((screenWidth / 2) - (size / 2), 30, size, size)
+
+        mapsButton = UIButton(frame: frame)
+        self.view.addSubview(mapsButton)
+        mapsButton.translatesAutoresizingMaskIntoConstraints = false
+
+        mapsButton.backgroundColor = UIColor.greenColor()
+        mapsButton.setTitle("Button", forState: UIControlState.Normal)
+
+        let tap = UITapGestureRecognizer(target: self, action: "tapMapsButton:")
+        tap.numberOfTapsRequired = 1
+        mapsButton.addGestureRecognizer(tap)
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.bounds.width)
+    func tapMapsButton(recognizer: UITapGestureRecognizer) {
+        print("tapped map")
+        self.presentViewController(mapViewController, animated: true, completion: nil)
     }
     
     // MARK: - Gesture Recognizer
