@@ -18,6 +18,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         panoViewController = PanoViewController()
         mapViewController = MapViewController()
 
@@ -25,9 +26,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
         setupGestureRecognizer()
         setupPageControl()
         setupMapsButton()
-        
-        //mapsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -88,12 +86,23 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
         let size = CGFloat(60)
         let frame = CGRectMake((screenWidth / 2) - (size / 2), 30, size, size)
 
-        mapsButton = UIButton(frame: frame)
+        let image = UIImage(named: "maps-icon") as UIImage?
+        let mapsButton   = UIButton(type:UIButtonType.System) as UIButton
+        mapsButton.frame = frame
+
+        mapsButton.setImage(image, forState: .Normal)
+
+//        mapsButton = UIButton(frame: frame)
+//        let image = UIImage(named: "maps-icon") as UIImage?
+//        mapsButton.setImage
+//        mapsButton = UIButton(frame: frame, type: UIButtonType.Custom)
+
+
         self.view.addSubview(mapsButton)
         mapsButton.translatesAutoresizingMaskIntoConstraints = false
 
         mapsButton.backgroundColor = UIColor.greenColor()
-        mapsButton.setTitle("Button", forState: UIControlState.Normal)
+        mapsButton.setTitle("Map", forState: UIControlState.Normal)
 
         let tap = UITapGestureRecognizer(target: self, action: "tapMapsButton:")
         tap.numberOfTapsRequired = 1
