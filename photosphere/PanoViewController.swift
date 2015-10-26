@@ -21,14 +21,14 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
     let sliderOffsetY: CGFloat = 40
     let sliderHeight: CGFloat = 15
     
-    /** Core Motion **/
+    /** Core Motion Variables **/
     var motionManager: CMMotionManager!
-    let FRAMES_PER_SECOND: Double = 30.0
-    
-    let YAW_DIFF_THRESHOLD = 0.21
-    var lastYaw = 0.0
-    var viewerYaw = 0.0
+    let FRAMES_PER_SECOND: Double = 30.0    // How often we update the camera
+    let YAW_DIFF_THRESHOLD = 0.21           // Used to account for drift in iPhone sensors
+    var lastYaw = 0.0                       // Used to keep track of last known iPhone sensor yaw reading
+    var viewerYaw = 0.0                     // Used to keep track of panorama viewer camera yaw value
 
+    /** Lat/Lng Viewer Coordinates **/
     var coordinate: CLLocationCoordinate2D?
 
     override func viewDidLoad() {
@@ -71,23 +71,14 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         panoView.navigationLinksHidden = true
         self.view.addSubview(panoView)
         
+        // Set panorama coordinates
         if (coordinate != nil) {
             panoView.moveNearCoordinate(coordinate!)
         } else {
             panoView.moveNearCoordinate(CLLocationCoordinate2DMake(-33.732, 150.312))
         }
 
-        // Initialize UISlider
-        sliderView = UISlider()
-        self.view.addSubview(sliderView)
-    }
-
-    override func viewWillLayoutSubviews() {
-        panoView.frame = self.view.bounds
-        
-        sliderView.frame = CGRectMake(CGRectGetMinX(self.view.bounds) + sliderOffsetX, CGRectGetMaxY(self.view.bounds) - sliderOffsetY,
-            self.view.bounds.width - 2 * sliderOffsetX, sliderHeight)
-        
+        // Set panorama camera to update with device motion (if motion sensors are available)
         motionManager = CMMotionManager()
         if motionManager?.deviceMotionAvailable == true {
             panoView.setAllGesturesEnabled(false)
@@ -96,34 +87,23 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
             let queue = NSOperationQueue()
             motionManager?.startDeviceMotionUpdatesUsingReferenceFrame(CMAttitudeReferenceFrame.XArbitraryCorrectedZVertical, toQueue: queue, withHandler: { [weak self] (motion, error) -> Void in
                 
-                // Get the attitude of the device
+                // Get device orientation information
                 let attitude = motion?.attitude
                 let gravity = motion?.gravity
                 if (attitude != nil && gravity != nil) {
-                    var gx = gravity!.x > 0 ? 1.0 : -1.0
-                    var roll = attitude!.roll * 180.0/M_PI
-                    var pitch = attitude!.pitch * 180.0/M_PI
-                    var yaw = -attitude!.yaw * 180.0/M_PI
+                    let roll = attitude!.roll * 180.0/M_PI
+                    let pitch = attitude!.pitch * 180.0/M_PI
+                    let yaw = -attitude!.yaw * 180.0/M_PI
+                    let gx = gravity!.x > 0 ? 1.0 : -1.0
                     
+                    // Initialize variables for tracking device/viewer yaw values
                     if self!.lastYaw == 0 {
                         self!.lastYaw = yaw
                         self!.viewerYaw = yaw
                     }
                     
-//                    // kalman filtering
-//                    var q = 0.2   // process noise
-//                    var r = 0.2   // sensor noise
-//                    var p = 0.1   // estimated error
-//                    var k = 0.5   // kalman filter gain
-//                    
-//                    var x = self!.lastYaw
-//                    p = p + q
-//                    k = p / (p + r)
-//                    x = x + k*(yaw - x)
-//                    p = (1 - k)*p
-//                    self!.lastYaw = x
-                    
-                    var yawDiff = yaw - self!.lastYaw
+                    // Only update viewer yaw if device yaw has changed by a sufficient threshold
+                    let yawDiff = yaw - self!.lastYaw
                     if (fabs(yawDiff) > self!.YAW_DIFF_THRESHOLD) {
                         self!.viewerYaw += yawDiff + gx * self!.YAW_DIFF_THRESHOLD
                     }
@@ -133,18 +113,25 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
 //                        print("r:\(roll), p:\(pitch), y:\(self!.viewerYaw)")
 //                        print("gx:\(motion!.gravity.x), gy:\(motion!.gravity.y), gz:\(motion!.gravity.z)")
                         
-                        self!.panoView.camera = GMSPanoramaCamera(heading: self!.viewerYaw, pitch:gx*roll - 90, zoom:1)
+                        // Update panorama viewer camera
+                        self!.panoView.camera = GMSPanoramaCamera(heading: self!.viewerYaw, pitch:gx * roll - 90, zoom:1)
                     }
                 }
             })
-        } else {
-            print("Device motion unavailable");
         }
+        
+        // Initialize slider
+        sliderView = UISlider()
+        self.view.addSubview(sliderView)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewWillLayoutSubviews() {
+        // Layout panorama viewer
+        panoView.frame = self.view.bounds
+        
+        // Layout slider
+        sliderView.frame = CGRectMake(CGRectGetMinX(self.view.bounds) + sliderOffsetX, CGRectGetMaxY(self.view.bounds) - sliderOffsetY,
+            self.view.bounds.width - 2 * sliderOffsetX, sliderHeight)
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -153,6 +140,11 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         self.view.setNeedsLayout()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
 }
 
