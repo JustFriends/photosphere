@@ -10,45 +10,47 @@ import UIKit
 import GoogleMaps
 
 class PanoViewController: UIViewController, GMSMapViewDelegate {
-    
-    @IBOutlet weak var bottomView: UIView!
-    
+
+    var panoView: GMSPanoramaView!
+    var sliderView: UISlider!
+
+    let sliderOffsetX: CGFloat = 50
+    let sliderOffsetY: CGFloat = 40
+    let sliderHeight: CGFloat = 15
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //TODO: use auto layout constraints instead of frame... maybe frame
-        
-        var panoView = GMSPanoramaView(frame: self.view.frame)
-        panoView.moveNearCoordinate(CLLocationCoordinate2DMake(-33.732, 150.312))
-        
-        //TODO: hook up target
-        var slider = UISlider(frame: CGRectMake(150, 280, self.view.frame.width * 0.5, 20)) //TODO: customize slider
-        
-        // TODO: stylez
-        var mapButton = UIButton(type: UIButtonType.System)
-        mapButton.frame = CGRectMake(500, 10, 40, 40)
-        mapButton.backgroundColor = UIColor.blueColor()
-        mapButton.setTitle("Map", forState: UIControlState.Normal)
-        mapButton.addTarget(self, action: "onMapClicked:", forControlEvents: UIControlEvents.TouchUpInside)
-        
+
+        panoView = GMSPanoramaView()
         self.view.addSubview(panoView)
-        self.view.addSubview(slider)
-        self.view.addSubview(mapButton)
-        
+
+        //TODO: move this out to function
+        panoView.moveNearCoordinate(CLLocationCoordinate2DMake(-33.732, 150.312))
+
+        //TODO: hook up target
+        sliderView = UISlider()
+        self.view.addSubview(sliderView)
     }
-    
+
+    override func viewWillLayoutSubviews() {
+        panoView.frame = self.view.bounds
+        
+        sliderView.frame = CGRectMake(CGRectGetMinX(self.view.bounds) + sliderOffsetX, CGRectGetMaxY(self.view.bounds) - sliderOffsetY,
+            self.view.bounds.width - 2 * sliderOffsetX, sliderHeight)
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    func onMapClicked(sender:UIButton!){
-        //TODO: push to explore/map view controller
-        print("on Map button clicked")
-        let mapViewController:MapViewController = MapViewController()
-        self.presentViewController(mapViewController, animated: true, completion: nil)
-        //navigationController?.pushViewController("MapViewController", animated: true)
-        
+
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.All
+    }
+
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        self.view.setNeedsLayout()
     }
 }
 
