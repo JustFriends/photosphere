@@ -18,6 +18,7 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
     let sliderOffsetY: CGFloat = 40
     let sliderHeight: CGFloat = 15
 
+    var coordinate: CLLocationCoordinate2D?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +27,11 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         self.view.addSubview(panoView)
 
         //TODO: move this out to function
-        panoView.moveNearCoordinate(CLLocationCoordinate2DMake(-33.732, 150.312))
+        if (coordinate != nil) {
+            panoView.moveNearCoordinate(coordinate!)
+        } else {
+            panoView.moveNearCoordinate(CLLocationCoordinate2DMake(-33.732, 150.312))
+        }
 
         //TODO: hook up target
         sliderView = UISlider()
