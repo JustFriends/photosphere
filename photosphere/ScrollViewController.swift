@@ -10,15 +10,17 @@ import UIKit
 
 class ScrollViewController: UIViewController, UIScrollViewDelegate {
     var scrollView: UIScrollView!
-    var imageView: UIImageView!
     var pageControl: UIPageControl!
+    
     var panoViewController: PanoViewController!
     var mapViewController: MapViewController!
+    
+    var imageView: UIImageView!
     var mapsButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         panoViewController = PanoViewController()
         mapViewController = MapViewController()
 
@@ -51,10 +53,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
         
         view.addSubview(scrollView)
         
-        self.pageControl = UIPageControl()
-        
-        view.addSubview(pageControl)
-        
         let pageWidth = scrollView.bounds.width
         let pageHeight = scrollView.bounds.height
         
@@ -77,33 +75,34 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func setupPageControl() {
+        self.pageControl = UIPageControl()
+        view.addSubview(pageControl)
+        
+        //**should set numberOfPages dynamically
         pageControl.numberOfPages = 3
         pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
     }
     
     func setupMapsButton() {
+        //create button
         let screenWidth = self.view.frame.size.width
         let size = CGFloat(60)
         let frame = CGRectMake((screenWidth / 2) - (size / 2), 30, size, size)
-
+        
+        //add image
         let image = UIImage(named: "maps-icon") as UIImage?
-        let mapsButton   = UIButton(type:UIButtonType.System) as UIButton
+        mapsButton = UIButton(type:UIButtonType.System) as UIButton
         mapsButton.frame = frame
-
         mapsButton.setImage(image, forState: .Normal)
-
-//        mapsButton = UIButton(frame: frame)
-//        let image = UIImage(named: "maps-icon") as UIImage?
-//        mapsButton.setImage
-//        mapsButton = UIButton(frame: frame, type: UIButtonType.Custom)
-
-
+        
+        //add button to subview
         self.view.addSubview(mapsButton)
         mapsButton.translatesAutoresizingMaskIntoConstraints = false
-
-        mapsButton.backgroundColor = UIColor.greenColor()
-        mapsButton.setTitle("Map", forState: UIControlState.Normal)
-
+        
+        addGestureRecognizerToMapsButton()
+    }
+    
+    func addGestureRecognizerToMapsButton() {
         let tap = UITapGestureRecognizer(target: self, action: "tapMapsButton:")
         tap.numberOfTapsRequired = 1
         mapsButton.addGestureRecognizer(tap)
@@ -125,7 +124,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
         print("tapped")
         self.presentViewController(panoViewController, animated: true, completion: nil)
     }
-    
     
     // MARK: - Zooming: http://www.appcoda.com/uiscrollview-introduction/
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
