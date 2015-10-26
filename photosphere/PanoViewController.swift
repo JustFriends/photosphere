@@ -9,13 +9,15 @@
 import UIKit
 import GoogleMaps
 
-class ViewController: UIViewController, GMSMapViewDelegate {
+class PanoViewController: UIViewController, GMSMapViewDelegate {
+
     var panoView: GMSPanoramaView!
     var sliderView: UISlider!
 
     let sliderOffsetX: CGFloat = 50
     let sliderOffsetY: CGFloat = 40
     let sliderHeight: CGFloat = 15
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
