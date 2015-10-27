@@ -30,7 +30,12 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
 
     /** Lat/Lng Viewer Coordinates **/
     var coordinate: CLLocationCoordinate2D?
+    
+    var curPanoIdx:Int = 0
+    let panoIds = ["8M0oSy72ZpFk4J3un7SP_Q", "AAjXHanNaa7Dtqg2EJVeJw", "iomOIUdQxOrEDNwCcYZezA", "lr1iiI-kK-y2xh21Y-_2-Q", "l6e5AqxAybbXLR6JDZGAvQ", "Y5Ksm5XXnoRBIT0Yo9Y2tA", "ZOlaZcBNsJpGElMdV_9mgA", "Qekog4wpckRgvRtLfYtRPg", "tCSQSQHKh_FooZSarXIEXQ", "IghRrTimM7EWs47efin2Rw", "EqOQAAniB8iN0lhbBH6UtQ", "1ZtbDdNk9WVQdpg21IFSsg"]
 
+//    let panoIds = ["PX6YfpzfUrt9uZSU1w0jgw", "lX_7bJrRcKYSc1TavLjEpA", "6OFOxdNE0bPOeIimGEZdww", "fW9Xcvf3Ruu6-3ztX98Atg", "Wa1lL6Gxwn5KpD8kNdwyGw", "M8OhPIPtPwUKVrVAaLB0Bg", "gGJFmV7F8390zQ7P-O53yw", "f1n1xnMpRTaqwxyX61I4-g", "9MPchhFmorzbgJojawhwog", "R1mfPYyD6b6mZTrvNfcYHw", "Z725BFV4tBx__LEbhkMqaA", "ITFc25E1U68uRvg1D9KHSg", "1c1bOspjxda0DqgboGkTcA", "SoMjaYiGi_ptXjWI775K6g"]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -75,7 +80,7 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         if (coordinate != nil) {
             panoView.moveNearCoordinate(coordinate!)
         } else {
-            panoView.moveNearCoordinate(CLLocationCoordinate2DMake(-33.732, 150.312))
+            panoView.moveNearCoordinate(CLLocationCoordinate2DMake(37.7737729,-122.408536))
         }
 
         // Set panorama camera to update with device motion (if motion sensors are available)
@@ -122,6 +127,9 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         
         // Initialize slider
         sliderView = UISlider()
+        sliderView.minimumValue = 0
+        sliderView.maximumValue = Float(panoIds.count - 1)
+        sliderView.addTarget(self, action: "sliderValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         self.view.addSubview(sliderView)
     }
 
@@ -145,6 +153,14 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func sliderValueChanged(slider: UISlider) -> () {
+        let curIdx = Int(round(slider.value))
+        if curIdx != curPanoIdx {
+            panoView.moveToPanoramaID(panoIds[curIdx])
+            curPanoIdx = curIdx
+        }
     }
 }
 
