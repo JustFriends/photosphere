@@ -5,10 +5,10 @@
 //  Created by David Fontenot on 10/25/15.
 //  Copyright © 2015 CodePath. All rights reserved.
 //
-
 import UIKit
+import MapKit
 
-class ScrollViewController: UIViewController, UIScrollViewDelegate {
+class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewControllerDelegate {
     var scrollView: UIScrollView!
     var pageControl: UIPageControl!
     
@@ -23,6 +23,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
         
         panoViewController = PanoViewController()
         mapViewController = MapViewController()
+        mapViewController.delegate = self
 
         setupScrollView()
         setupGestureRecognizer()
@@ -42,6 +43,10 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
 
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.bounds.width)
+    }
+    
+    func mapViewController(mapViewcontroller: MapViewController!, didDismissWithCoordinate coordinate: CLLocationCoordinate2D) {
+        print("delegate called \(coordinate)")
     }
 
     func setupScrollView() {
