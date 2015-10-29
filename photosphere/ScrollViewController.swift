@@ -148,9 +148,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         print("tapped")
         print(recognizer.view?.backgroundColor)
         //pass in a CLLocationCoordinate2D
-        self.presentViewController(panoViewController, animated: true) { () -> Void in
-            //self.panoViewController.coordinate = CLLocationCoordinate2DMake(37.7737729,-122.408536)
-        }
+        self.panoViewController.coordinate = CLLocationCoordinate2DMake(40.71288,-74.0140183)
+        self.presentViewController(panoViewController, animated: true, completion: nil)
     }
     
     // MARK: - Zooming: http://www.appcoda.com/uiscrollview-introduction/
