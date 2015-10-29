@@ -24,10 +24,19 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
         panoViewController = PanoViewController()
         mapViewController = MapViewController()
 
+        //scrollView = UIScrollView(frame: view.bounds)
+
+        scrollView = UIScrollView(frame: view.bounds)
         setupScrollView()
+        view.addSubview(scrollView)
         setupGestureRecognizer()
         setupPageControl()
         setupMapsButton()
+    }
+
+    override func viewWillLayoutSubviews() {
+        //scrollView = UIScrollView(frame: self.view.bounds)
+        scrollView.frame = self.view.bounds
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,13 +54,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func setupScrollView() {
-        scrollView = UIScrollView(frame: view.bounds)
-        
         let contentWidth = scrollView.bounds.width
         let contentHeight = scrollView.bounds.height * 3
         scrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
-        
-        view.addSubview(scrollView)
         
         let pageWidth = scrollView.bounds.width
         let pageHeight = scrollView.bounds.height
@@ -122,6 +127,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
     
     func handleTap(recognizer: UITapGestureRecognizer) {
         print("tapped")
+        //pass in a CLLocationCoordinate2D
         self.presentViewController(panoViewController, animated: true, completion: nil)
     }
     
