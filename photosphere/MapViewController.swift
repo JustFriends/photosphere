@@ -16,22 +16,26 @@ protocol MapViewControllerDelegate {
 class MapViewController: UIViewController, GMSMapViewDelegate {
     
     var delegate: MapViewControllerDelegate?
+    
+    var coordinate: CLLocationCoordinate2D?
+    let defaultZoom: Float = 14
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Set panorama coordinates
+        if (coordinate == nil) {
+            coordinate = CLLocationCoordinate2DMake(37.7737729,-122.408536)
+        }
 
-        // TODO: currently hardcoding location. no more :(
-        let camera = GMSCameraPosition.cameraWithLatitude(-33.732,
-            longitude: 150.312, zoom: 14)
+        let camera = GMSCameraPosition.cameraWithTarget(coordinate!, zoom: defaultZoom)
         let mapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
         mapView.delegate = self;
         mapView.myLocationEnabled = true
         self.view = mapView
         
         let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2DMake(-33.732, 150.312)
-        marker.title = "Sydney"
-        marker.snippet = "Australia"
+        marker.position = coordinate!
         marker.map = mapView
     }
 
