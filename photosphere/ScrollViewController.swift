@@ -128,6 +128,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     
     func tapMapsButton(recognizer: UITapGestureRecognizer) {
         print("tapped map")
+        self.mapViewController.coordinate = CLLocationCoordinate2DMake(40.71288,-74.0140183)
         self.presentViewController(mapViewController, animated: true, completion: nil)
     }
     
