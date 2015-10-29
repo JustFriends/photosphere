@@ -119,7 +119,9 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
 //                        print("gx:\(motion!.gravity.x), gy:\(motion!.gravity.y), gz:\(motion!.gravity.z)")
                         
                         // Update panorama viewer camera
-                        self!.panoView.camera = GMSPanoramaCamera(heading: self!.viewerYaw, pitch:gx * roll - 90, zoom:1)
+                        let viewerHeading = self!.viewerYaw + (gx > 0 ? 180 : 0)
+                        let viewerPitch = gx * roll - 90
+                        self!.panoView.camera = GMSPanoramaCamera(heading: viewerHeading, pitch:viewerPitch, zoom:1)
                     }
                 }
             })
@@ -143,7 +145,7 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.All
+        return UIInterfaceOrientationMask.Landscape
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
