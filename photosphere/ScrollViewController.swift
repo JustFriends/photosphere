@@ -7,6 +7,7 @@
 //
 import UIKit
 import MapKit
+import GoogleMaps
 
 class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewControllerDelegate {
     var scrollView: UIScrollView!
@@ -18,6 +19,11 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     var imageView: UIImageView!
     var mapsButton: UIButton!
     
+    var placesClient: GMSPlacesClient?
+    var placePicker: GMSPlacePicker?
+
+    var coordinate: CLLocationCoordinate2D?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,6 +39,49 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
 
         self.mapsButton = UIButton(type:UIButtonType.System) as UIButton
         self.view.addSubview(self.mapsButton)
+
+        placesClient = GMSPlacesClient()
+
+    }
+
+    func requestLocation (lat:CLLocationDegrees, long:CLLocationDegrees) {
+//        placesClient?.currentPlaceWithCallback({ (placeLikelihoodList: GMSPlaceLikelihoodList?, error: NSError?) -> Void in
+//            if let error = error {
+//                print("Pick Place error: \(error.localizedDescription)")
+//                return
+//            }
+//
+//            if let placeLicklihoodList = placeLikelihoodList {
+//                let place = placeLicklihoodList.likelihoods.first?.place
+//                if let place = place {
+//                    print(place.name)
+//                    print(place.formattedAddress)
+//                }
+//            }
+//        })
+        let center = CLLocationCoordinate2DMake(lat, long)
+        let northEast = CLLocationCoordinate2DMake(center.latitude + 0.001, center.longitude + 0.001)
+        let southWest = CLLocationCoordinate2DMake(center.latitude - 0.001, center.longitude - 0.001)
+        let viewport = GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
+        let config = GMSPlacePickerConfig(viewport: viewport)
+        placePicker = GMSPlacePicker(config: config)
+
+        placePicker?.pickPlaceWithCallback({ (place: GMSPlace?, error: NSError?) -> Void in
+            if let error = error {
+                print("Pick Place error: \(error.localizedDescription)")
+                return
+            }
+
+            if let place = place {
+                print("Place name \(place.name)")
+                print("Place address \(place.formattedAddress)")
+                print("Place attributions \(place.attributions)")
+                print("Place coordinates \(place.coordinate)")
+                self.coordinate = CLLocationCoordinate2DMake(place.coordinate.latitude, place.coordinate.longitude)
+            } else {
+                print("No place selected")
+            }
+        })
     }
 
     override func viewWillLayoutSubviews() {
@@ -127,9 +176,13 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     }
     
     func tapMapsButton(recognizer: UITapGestureRecognizer) {
+        requestLocation(-25.6867,long: -54.4447)
+        //requestLocation(40.71288,long:-74.0140183)
         print("tapped map")
-        self.mapViewController.coordinate = CLLocationCoordinate2DMake(40.71288,-74.0140183)
-        self.presentViewController(mapViewController, animated: true, completion: nil)
+        //get coordinates from page clicked here
+        print(recognizer.view?.backgroundColor)
+        //self.mapViewController.coordinate = CLLocationCoordinate2DMake(40.71288,-74.0140183)
+        //self.presentViewController(mapViewController, animated: true, completion: nil)
     }
     
     // MARK: - Gesture Recognizer
@@ -147,9 +200,14 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     
     func handleTap(recognizer: UITapGestureRecognizer) {
         print("tapped")
+        //get coordinates from page clicked here
         print(recognizer.view?.backgroundColor)
         //pass in a CLLocationCoordinate2D
-        self.panoViewController.coordinate = CLLocationCoordinate2DMake(40.71288,-74.0140183)
+        if self.coordinate != nil {
+            self.panoViewController.coordinate = self.coordinate
+        } else {
+            self.panoViewController.coordinate = CLLocationCoordinate2DMake(40.71288,-74.0140183)
+        }
         self.presentViewController(panoViewController, animated: true, completion: nil)
     }
     
