@@ -25,19 +25,20 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         mapViewController = MapViewController()
         mapViewController.delegate = self
 
-        //scrollView = UIScrollView(frame: view.bounds)
+        self.scrollView = UIScrollView(frame: view.bounds)
+        view.addSubview(self.scrollView)
 
-        scrollView = UIScrollView(frame: view.bounds)
-        setupScrollView()
-        view.addSubview(scrollView)
-        setupGestureRecognizer()
-        setupPageControl()
-        setupMapsButton()
+        self.pageControl = UIPageControl()
+        view.addSubview(pageControl)
+
+        self.mapsButton = UIButton(type:UIButtonType.System) as UIButton
+        self.view.addSubview(self.mapsButton)
     }
 
     override func viewWillLayoutSubviews() {
-        //scrollView = UIScrollView(frame: self.view.bounds)
-        scrollView.frame = self.view.bounds
+        setupScrollView()
+        setupPageControl()
+        setupMapsButton()
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,17 +60,23 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     }
 
     func setupScrollView() {
+        scrollView.frame = self.view.bounds
+        print(scrollView.frame)
         let contentWidth = scrollView.bounds.width
-        let contentHeight = scrollView.bounds.height * 3
+        let contentHeight = scrollView.bounds.height
         scrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
         
-        let pageWidth = scrollView.bounds.width
-        let pageHeight = scrollView.bounds.height
-        
-        scrollView.contentSize = CGSizeMake(3*pageWidth, pageHeight)
+        scrollView.contentSize = CGSizeMake(CGFloat(self.scrollView.subviews.count)*scrollView.bounds.width, scrollView.bounds.height)
         scrollView.pagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
         
+        let pageWidth = view.bounds.width
+        let pageHeight = view.bounds.height
+
+        for subview in scrollView.subviews {
+            subview.removeFromSuperview()
+        }
+
         let view1 = UIView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
         view1.backgroundColor = UIColor.blueColor()
         let view2 = UIView(frame: CGRectMake(pageWidth, 0, pageWidth, pageHeight))
@@ -81,13 +88,14 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         scrollView.addSubview(view2)
         scrollView.addSubview(view3)
         
+        for subview in scrollView.subviews {
+            addGestureRecognizerToPage(subview)
+        }
+
         scrollView.delegate = self
     }
 
     func setupPageControl() {
-        self.pageControl = UIPageControl()
-        view.addSubview(pageControl)
-        
         //**should set numberOfPages dynamically
         pageControl.numberOfPages = 3
         pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
@@ -98,15 +106,15 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         let screenWidth = self.view.frame.size.width
         let size = CGFloat(60)
         let frame = CGRectMake((screenWidth / 2) - (size / 2), 30, size, size)
+        mapsButton.frame = frame
         
         //add image
         let image = UIImage(named: "maps-icon") as UIImage?
-        mapsButton = UIButton(type:UIButtonType.System) as UIButton
-        mapsButton.frame = frame
+
         mapsButton.setImage(image, forState: .Normal)
         
         //add button to subview
-        self.view.addSubview(mapsButton)
+
         mapsButton.translatesAutoresizingMaskIntoConstraints = false
         
         addGestureRecognizerToMapsButton()
@@ -124,16 +132,25 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     }
     
     // MARK: - Gesture Recognizer
-    func setupGestureRecognizer() {
+//    func setupGestureRecognizer() {
+//        let tap = UITapGestureRecognizer(target: self, action: "handleTap:")
+//        tap.numberOfTapsRequired = 1
+//        scrollView.addGestureRecognizer(tap)
+//    }
+
+    func addGestureRecognizerToPage(page:UIView) {
         let tap = UITapGestureRecognizer(target: self, action: "handleTap:")
         tap.numberOfTapsRequired = 1
-        scrollView.addGestureRecognizer(tap)
+        page.addGestureRecognizer(tap)
     }
     
     func handleTap(recognizer: UITapGestureRecognizer) {
         print("tapped")
+        print(recognizer.view?.backgroundColor)
         //pass in a CLLocationCoordinate2D
-        self.presentViewController(panoViewController, animated: true, completion: nil)
+        self.presentViewController(panoViewController, animated: true) { () -> Void in
+            //self.panoViewController.coordinate = CLLocationCoordinate2DMake(37.7737729,-122.408536)
+        }
     }
     
     // MARK: - Zooming: http://www.appcoda.com/uiscrollview-introduction/
@@ -151,14 +168,19 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         scrollView.zoomScale = 1.0
     }
 
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if (segue.identifier == "segueToMap") {
+
+        } else if (segue.identifier == "segueToPano") {
+
+        }
     }
-    */
+
 
 }
