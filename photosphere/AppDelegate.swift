@@ -8,6 +8,8 @@
 
 import UIKit
 import GoogleMaps
+import Parse
+import Bolts
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +20,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         let kGoogleAPIKey = valueForAPIKey("GOOGLE_API_KEY")
         GMSServices.provideAPIKey(kGoogleAPIKey)
+        
+        let parseAppId = valueForAPIKey("PARSE_APPLICATION_ID")
+        let parseAPIKey = valueForAPIKey("PARSE_API_KEY")
+        
+        Parse.setApplicationId(parseAppId, clientKey: parseAPIKey)
+        
         return true
     }
 

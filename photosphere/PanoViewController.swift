@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import CoreMotion
+import Parse
 
 class PanoViewController: UIViewController, GMSMapViewDelegate {
     
@@ -33,11 +34,16 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
     
     var curPanoIdx:Int = 0
     let panoIds = ["8M0oSy72ZpFk4J3un7SP_Q", "AAjXHanNaa7Dtqg2EJVeJw", "iomOIUdQxOrEDNwCcYZezA", "lr1iiI-kK-y2xh21Y-_2-Q", "l6e5AqxAybbXLR6JDZGAvQ", "Y5Ksm5XXnoRBIT0Yo9Y2tA", "ZOlaZcBNsJpGElMdV_9mgA", "Qekog4wpckRgvRtLfYtRPg", "tCSQSQHKh_FooZSarXIEXQ", "IghRrTimM7EWs47efin2Rw", "EqOQAAniB8iN0lhbBH6UtQ", "1ZtbDdNk9WVQdpg21IFSsg"]
+    
+    //let panoDateDict: [String:String] = Dictionary()
+    let panoDateDict = ["8M0oSy72ZpFk4J3un7SP_Q": "Nov 2007", "AAjXHanNaa7Dtqg2EJVeJw": "Jul 2009", "iomOIUdQxOrEDNwCcYZezA":"Feb 2011", "lr1iiI-kK-y2xh21Y-_2-Q":"May 2013", "l6e5AqxAybbXLR6JDZGAvQ":"Nov 2013", "Y5Ksm5XXnoRBIT0Yo9Y2tA":"Jan 2014", "ZOlaZcBNsJpGElMdV_9mgA":"Jun 2014", "Qekog4wpckRgvRtLfYtRPg":"Jul 2014", "tCSQSQHKh_FooZSarXIEXQ":"Oct 2014", "IghRrTimM7EWs47efin2Rw":"Feb 2015", "EqOQAAniB8iN0lhbBH6UtQ":"Jun 2015", "1ZtbDdNk9WVQdpg21IFSsg":"Jul 2015"]
+    
 
 //    let panoIds = ["PX6YfpzfUrt9uZSU1w0jgw", "lX_7bJrRcKYSc1TavLjEpA", "6OFOxdNE0bPOeIimGEZdww", "fW9Xcvf3Ruu6-3ztX98Atg", "Wa1lL6Gxwn5KpD8kNdwyGw", "M8OhPIPtPwUKVrVAaLB0Bg", "gGJFmV7F8390zQ7P-O53yw", "f1n1xnMpRTaqwxyX61I4-g", "9MPchhFmorzbgJojawhwog", "R1mfPYyD6b6mZTrvNfcYHw", "Z725BFV4tBx__LEbhkMqaA", "ITFc25E1U68uRvg1D9KHSg", "1c1bOspjxda0DqgboGkTcA", "SoMjaYiGi_ptXjWI775K6g"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         // Ferry Building (37.7944876,-122.3948276)
 //        let panoramaNear = CLLocationCoordinate2DMake(37.7944876,-122.3948276)
@@ -77,10 +83,35 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         self.view.addSubview(panoView)
         
         // Set panorama coordinates
-        if (coordinate != nil) {
-            panoView.moveNearCoordinate(coordinate!)
-        } else {
-            panoView.moveNearCoordinate(CLLocationCoordinate2DMake(37.7737729,-122.408536))
+        if (coordinate == nil) {
+            coordinate = CLLocationCoordinate2DMake(37.7737729,-122.408536)
+        }
+        panoView.moveNearCoordinate(coordinate!)
+        
+        //TODO: put this in a function/script
+//        var panoData = PFObject(className:"PanoData")
+//        panoData["latitude"] = coordinate!.latitude
+//        panoData["longitude"] = coordinate!.longitude
+//        panoData["panoDateDict"] = panoDateDict
+//        
+//        panoData.saveInBackgroundWithBlock {
+//            (success: Bool, error: NSError?) -> Void in
+//            if (success) {
+//                print("has been saved")
+//            } else {
+//                print(error?.description)
+//            }
+//        }
+        
+        //TEMP: code snippet to fetch from parse - xfz
+        var query = PFQuery(className:"PanoData")
+        query.getObjectInBackgroundWithId("9fNLFJ6q1c") {
+            (panodata: PFObject?, error: NSError?) -> Void in
+            if error == nil && panodata != nil {
+                print(panodata)
+            } else {
+                print(error)
+            }
         }
 
         // Set panorama camera to update with device motion (if motion sensors are available)
