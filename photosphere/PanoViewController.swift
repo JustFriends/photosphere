@@ -49,13 +49,18 @@ class PanoViewController: UIViewController {
     
     /** PanoIDs **/
     var curPanoIdx:Int = 0
+    
 //    let panoIds = ["8M0oSy72ZpFk4J3un7SP_Q", "AAjXHanNaa7Dtqg2EJVeJw", "iomOIUdQxOrEDNwCcYZezA", "lr1iiI-kK-y2xh21Y-_2-Q", "l6e5AqxAybbXLR6JDZGAvQ", "Y5Ksm5XXnoRBIT0Yo9Y2tA", "ZOlaZcBNsJpGElMdV_9mgA", "Qekog4wpckRgvRtLfYtRPg", "tCSQSQHKh_FooZSarXIEXQ", "IghRrTimM7EWs47efin2Rw", "EqOQAAniB8iN0lhbBH6UtQ", "1ZtbDdNk9WVQdpg21IFSsg"]
 
 //    let panoIds = ["PX6YfpzfUrt9uZSU1w0jgw", "lX_7bJrRcKYSc1TavLjEpA", "6OFOxdNE0bPOeIimGEZdww", "fW9Xcvf3Ruu6-3ztX98Atg", "Wa1lL6Gxwn5KpD8kNdwyGw", "M8OhPIPtPwUKVrVAaLB0Bg", "gGJFmV7F8390zQ7P-O53yw", "f1n1xnMpRTaqwxyX61I4-g", "9MPchhFmorzbgJojawhwog", "R1mfPYyD6b6mZTrvNfcYHw", "Z725BFV4tBx__LEbhkMqaA", "ITFc25E1U68uRvg1D9KHSg", "1c1bOspjxda0DqgboGkTcA", "SoMjaYiGi_ptXjWI775K6g"]
     
 //    let panoIds = ["8M0oSy72ZpFk4J3un7SP_Q", "AAjXHanNaa7Dtqg2EJVeJw", "iomOIUdQxOrEDNwCcYZezA", "lr1iiI-kK-y2xh21Y-_2-Q", "l6e5AqxAybbXLR6JDZGAvQ", "Y5Ksm5XXnoRBIT0Yo9Y2tA", "ZOlaZcBNsJpGElMdV_9mgA", "Qekog4wpckRgvRtLfYtRPg", "tCSQSQHKh_FooZSarXIEXQ", "IghRrTimM7EWs47efin2Rw", "EqOQAAniB8iN0lhbBH6UtQ", "1ZtbDdNk9WVQdpg21IFSsg"]
     
-    let panoIds = ["1Dy-VwTcyuQvB5I_-7_2Rw", "Bkj5T7_ucCqszo041xDzYA", "Po_C7wwaeWUCogm7AlcG2w", "o_if0Nlc0rPFareD1jew1w", "jExha2UWpDyCoWF_k83z_A", "9tSX6Us59MBve8kZtJkEMA", "4fTr34kJu9FM_7KQ9M77bQ", "e2KORPNObCvD878fUZxalQ", "jB0WxPBjOcXBwSjp1ZbkOQ", "bz2f1lKHqBBL1-YeAb5gWg"]
+//    let panoIds = ["1Dy-VwTcyuQvB5I_-7_2Rw", "Bkj5T7_ucCqszo041xDzYA", "Po_C7wwaeWUCogm7AlcG2w", "o_if0Nlc0rPFareD1jew1w", "jExha2UWpDyCoWF_k83z_A", "9tSX6Us59MBve8kZtJkEMA", "4fTr34kJu9FM_7KQ9M77bQ", "e2KORPNObCvD878fUZxalQ", "jB0WxPBjOcXBwSjp1ZbkOQ", "bz2f1lKHqBBL1-YeAb5gWg"]
+    
+    let panoIds = ["ydgoRUaihAL1HsBupYpg3g", "z0zIzWF1FXzlFLbzlyJGDA", "NT4T3bzg2Kcy3F8EuEDTyQ", "y_sXV7q2KnaeCy-WzG54fw", "43OS4Wqy_dVOt9VrC0CufA", "z7G09QmArnIAAAGusfdMqA", "KtpAFSPqmnUJDPtl2ER_KA", "yL1L01_gz-xtT63A474-qw", "cdyOxiQyyiUhVWeAPgd7jg", "Qvw_KZpSwAsP6-vIycF-Nw", "nckLYnNw1BA6Bdt4MLZJiA", "BjaJWJM1A4cAAAQYWWv-Qw", "NMpc8Tf9lStL3v0zsPbRUA", "Ruh4v3MJ7HQAAAQfDU3OlA", "IfQUtYCsXT0AAAQqargRfw", "_FVxOVvg67PO2p74igUtdQ"]
+    
+//    let panoIds = ["LS2ysGGsA7qFZwTgByApgA", "6JGJk7avMBL4ENdpV_W3CQ", "oxXGPISsU9Q_sIFiHjICag"]
     
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     
@@ -168,11 +173,14 @@ class PanoViewController: UIViewController {
         self.view.addSubview(backButton)
         
         // Initialize date label
-        dateLabel = UILabel(frame: CGRectMake(150, dateLabelOffsetY, 100, 20))
-        dateLabel.text = "Feb 2009"
+        dateLabel = UILabel(frame: CGRectMake(150, dateLabelOffsetY, 120, 50))
         dateLabel.backgroundColor = UIColor.blackColor()
+        dateLabel.alpha = 0
+        dateLabel.layer.cornerRadius = 3
+        dateLabel.clipsToBounds = true
+        dateLabel.font = UIFont(name: "HelveticaNeue-Regular", size: 24)
+        dateLabel.textAlignment = NSTextAlignment.Center
         dateLabel.textColor = UIColor.whiteColor()
-        dateLabel.alpha = 0.8
         self.view.addSubview(dateLabel)
     }
 
@@ -185,7 +193,7 @@ class PanoViewController: UIViewController {
             self.view.bounds.width - 2 * sliderOffsetX, sliderHeight)
         
         // Layout date label
-//        dateLabel.frame =
+        dateLabel.frame = CGRectMake((self.view.bounds.width - dateLabel.bounds.width)/2, dateLabelOffsetY, dateLabel.bounds.width, dateLabel.bounds.height)
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -227,6 +235,11 @@ extension PanoViewController: UIWebViewDelegate {
         // Setup a callback function for javascript to call after fetching panorama date
         let updateDateLabel: @convention(block) String -> () = { inputString in
             self.dateLabel.text = self.getDateLabelString(inputString)
+            if (self.dateLabel.alpha == 0) {
+                UIView.animateWithDuration(0.5) {
+                    self.dateLabel.alpha = 0.7
+                }
+            }
         }
         context.setObject(unsafeBitCast(updateDateLabel, AnyObject.self), forKeyedSubscript: "updateDateLabel")
         
@@ -236,6 +249,10 @@ extension PanoViewController: UIWebViewDelegate {
         
         // Initialize an instance of StreetViewService
         context.evaluateScript("var sv = new google.maps.StreetViewService();")
+        
+        let curPanoID = panoView.panorama.panoramaID
+        let scriptString = "sv.getPanorama({pano: '\(curPanoID)'}, processSVData);"
+        context.evaluateScript(scriptString)
     }
     
     func backButtonTapped() -> () {
@@ -243,7 +260,6 @@ extension PanoViewController: UIWebViewDelegate {
     }
     
     func getDateLabelString(oldString: String) -> String {
-        print(oldString)
         let dateComponents = oldString.characters.split{$0 == "-"}.map(String.init)
         let yearString = dateComponents[0]
         let monthString = months[Int(dateComponents[1])! - 1]
