@@ -84,9 +84,9 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         
         // Set panorama coordinates
         if (coordinate == nil) {
-            coordinate = CLLocationCoordinate2DMake(37.7737729,-122.408536)
+           panoView.moveNearCoordinate(CLLocationCoordinate2DMake(37.7737729,-122.408536))
         }
-        panoView.moveNearCoordinate(coordinate!)
+        panoView.moveNearCoordinate(coordinate!, radius: 500)
         
         //TODO: put this in a function/script
 //        var panoData = PFObject(className:"PanoData")
