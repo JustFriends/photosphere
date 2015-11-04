@@ -52,9 +52,8 @@ class PanoViewController: UIViewController {
             query.whereKey("longitude", equalTo: coordinate!.longitude)
             query.findObjectsInBackgroundWithBlock { (objects: [PFObject]?, error: NSError?) -> Void in
                 if error == nil {
+                    self.dateLabel.alpha = 0
                     if let entry = objects?.first as PFObject! {
-                        self.dateLabel.alpha = 0
-                        
                         self.panoIds = entry["panoIds"] as! [String]
                         self.curPanoIdx = self.panoIds.count - 1
                         self.panoView.navigationLinksHidden = true
@@ -72,6 +71,7 @@ class PanoViewController: UIViewController {
                     } else {
                         self.sliderView.hidden = true
                         
+                        self.panoIds = []
                         self.panoView.navigationLinksHidden = false
                         self.panoView.navigationGestures = true
                         self.panoView.moveNearCoordinate(self.coordinate!, radius: 500)
@@ -256,10 +256,14 @@ extension PanoViewController: UIWebViewDelegate {
     }
     
     func getDateLabelString(oldString: String) -> String {
-        let dateComponents = oldString.characters.split{$0 == "-"}.map(String.init)
-        let yearString = dateComponents[0]
-        let monthString = months[Int(dateComponents[1])! - 1]
-        return monthString + " " + yearString
+        if (panoIds.count > 1) {
+            let dateComponents = oldString.characters.split{$0 == "-"}.map(String.init)
+            let yearString = dateComponents[0]
+            let monthString = months[Int(dateComponents[1])! - 1]
+            return monthString + " " + yearString
+        } else {
+            return "May 2008"
+        }
     }
 }
 
