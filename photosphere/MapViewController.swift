@@ -48,6 +48,14 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         self.delegate?.mapViewController(self, didDismissWithCoordinate: coordinate)
         self.dismissViewControllerAnimated(true, completion: nil)   //TODO: do we really want to dismiss it?
     }
+    
+    override func shouldAutorotate() -> Bool {
+        return true
+    }
+    
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return [UIInterfaceOrientationMask.LandscapeLeft,UIInterfaceOrientationMask.LandscapeRight]
+    }
 
     /*
     // MARK: - Navigation

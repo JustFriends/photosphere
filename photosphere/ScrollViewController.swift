@@ -330,6 +330,14 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         scrollView.minimumZoomScale = min(widthScale, heightScale)
         scrollView.zoomScale = 1.0
     }
+    
+    override func shouldAutorotate() -> Bool {
+        return true
+    }
+    
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return [UIInterfaceOrientationMask.LandscapeLeft,UIInterfaceOrientationMask.LandscapeRight]
+    }
 
 
     // MARK: - Navigation

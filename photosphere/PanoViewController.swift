@@ -189,9 +189,13 @@ class PanoViewController: UIViewController {
         // Layout date label
         dateLabel.frame = CGRectMake((self.view.bounds.width - dateLabel.bounds.width)/2, dateLabelOffsetY, dateLabel.bounds.width, dateLabel.bounds.height)
     }
-
+    
+    override func shouldAutorotate() -> Bool {
+        return true
+    }
+    
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.Landscape
+        return [UIInterfaceOrientationMask.LandscapeLeft,UIInterfaceOrientationMask.LandscapeRight]
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
