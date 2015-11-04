@@ -149,10 +149,16 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
             subview.removeFromSuperview()
         }
 
-        let view1 = UIView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
-        //UIImageView()
-        //view1.setImageWithURL(NSURL(fileURLWithPath: "http://www.hdiphonewallpapers.us/phone-wallpapers/iphone-4-wallpapers/hd-iphone-4-wallpapers-94ios.jpg"))
-        view1.backgroundColor = UIColor.blueColor()
+        //let view1 = UIView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
+        let view1 = UIImageView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
+        
+        let urlString = "https://maps.googleapis.com/maps/api/streetview?location=37.7737729,-122.408536&size=\(Int(pageWidth))x\(Int(pageHeight))"
+        print(urlString)
+        view1.setImageWithURL(NSURL(string: urlString)!)
+        //view1.setImageWithURL(NSURL(string: "https://maps.googleapis.com/maps/api/streetview?location=37.7737729,-122.408536&size=375x667")!)
+        
+        //view1.backgroundColor = UIColor(patternImage: UIImage(named: "8th&Harrison")!)
+        //view1.backgroundColor = UIColor.blueColor()
 
         let view2 = UIView(frame: CGRectMake(pageWidth, 0, pageWidth, pageHeight))
         view2.backgroundColor = UIColor.orangeColor()
