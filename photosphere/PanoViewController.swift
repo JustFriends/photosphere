@@ -54,7 +54,7 @@ class PanoViewController: UIViewController {
                 if error == nil {
                     self.dateLabel.alpha = 0
                     if let entry = objects?.first as PFObject! {
-                        self.panoIds = (entry["panoIds"] as! [String]).reverse()
+                        self.panoIds = entry["panoIds"] as! [String]
                         self.curPanoIdx = 0
                         self.panoView.navigationLinksHidden = true
                         self.panoView.navigationGestures = false
