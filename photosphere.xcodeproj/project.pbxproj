@@ -14,6 +14,7 @@
 		9FB0FF141BE878430021249D /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FB0FF121BE878430021249D /* Bolts.framework */; };
 		9FB0FF151BE878430021249D /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FB0FF131BE878430021249D /* Parse.framework */; };
 		BB3F0DF61BD8BE1000B4E75B /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3F0DF51BD8BE1000B4E75B /* APIKeys.swift */; };
+		BBFDF7B61BE8D4F500C1D5ED /* GoogleMapsJSWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFDF7B51BE8D4F500C1D5ED /* GoogleMapsJSWrapper.swift */; };
 		DA2E84E81BD5B3EA0006ED8C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E84E71BD5B3EA0006ED8C /* AppDelegate.swift */; };
 		DA2E84EA1BD5B3EA0006ED8C /* PanoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E84E91BD5B3EA0006ED8C /* PanoViewController.swift */; };
 		DA2E84ED1BD5B3EA0006ED8C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA2E84EB1BD5B3EA0006ED8C /* Main.storyboard */; };
@@ -43,6 +44,7 @@
 		9FB0FF121BE878430021249D /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		9FB0FF131BE878430021249D /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		BB3F0DF51BD8BE1000B4E75B /* APIKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
+		BBFDF7B51BE8D4F500C1D5ED /* GoogleMapsJSWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapsJSWrapper.swift; sourceTree = "<group>"; };
 		DA2E84E41BD5B3EA0006ED8C /* photosphere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = photosphere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA2E84E71BD5B3EA0006ED8C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DA2E84E91BD5B3EA0006ED8C /* PanoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanoViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				DA2E84F01BD5B3EA0006ED8C /* LaunchScreen.storyboard */,
 				DA2E84F31BD5B3EA0006ED8C /* Info.plist */,
 				9F4F2E7F1BE9A33400FDADC0 /* photosphere-Bridging-Header.h */,
+				BBFDF7B51BE8D4F500C1D5ED /* GoogleMapsJSWrapper.swift */,
 			);
 			path = photosphere;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				DAD57F9B1BD634CF00D4A43B /* MapViewController.swift in Sources */,
 				9F610BB51BDD5D5D00AB8B38 /* ScrollViewController.swift in Sources */,
 				BB3F0DF61BD8BE1000B4E75B /* APIKeys.swift in Sources */,
+				BBFDF7B61BE8D4F500C1D5ED /* GoogleMapsJSWrapper.swift in Sources */,
 				DA2E84E81BD5B3EA0006ED8C /* AppDelegate.swift in Sources */,
 				9F610BB71BDD9A0900AB8B38 /* ScrollViewPage.swift in Sources */,
 			);
