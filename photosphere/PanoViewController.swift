@@ -27,7 +27,7 @@ class PanoViewController: UIViewController {
     var backButton: UIButton!
     let buttonOffsetX: CGFloat = 10
     let buttonOffsetY: CGFloat = 10
-    let buttonSideLength: CGFloat = 32
+    let buttonSideLength: CGFloat = 40
     
     /** UIWebView for Javascript Queries **/
     var webView: UIWebView!
@@ -45,22 +45,36 @@ class PanoViewController: UIViewController {
     var viewerYaw = 0.0                     // Used to keep track of panorama viewer camera yaw value
 
     /** Lat/Lng Viewer Coordinates **/
-    var coordinate: CLLocationCoordinate2D?
+    var coordinate: CLLocationCoordinate2D? {
+        didSet {
+            let query = PFQuery(className:"PanoData")
+            query.whereKey("latitude", equalTo: coordinate!.latitude)
+            query.whereKey("longitude", equalTo: coordinate!.longitude)
+            query.findObjectsInBackgroundWithBlock { (objects: [PFObject]?, error: NSError?) -> Void in
+                if error == nil {
+                    if let entry = objects?.first as PFObject! {
+                        self.dateLabel.alpha = 0
+                        
+                        self.panoIds = entry["panoIds"] as! [String]
+                        self.curPanoIdx = self.panoIds.count - 1
+                        self.panoView.moveToPanoramaID(self.panoIds[self.curPanoIdx])
+                        
+                        self.sliderView.maximumValue = Float(self.panoIds.count - 1)
+                        self.sliderView.value = self.sliderView.maximumValue
+                        
+                        if (self.context != nil) {
+                            let scriptString = "sv.getPanorama({pano: '\(self.panoIds[self.curPanoIdx])'}, processSVData);"
+                            self.context.evaluateScript(scriptString)
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     /** PanoIDs **/
     var curPanoIdx:Int = 0
-    
-//    let panoIds = ["8M0oSy72ZpFk4J3un7SP_Q", "AAjXHanNaa7Dtqg2EJVeJw", "iomOIUdQxOrEDNwCcYZezA", "lr1iiI-kK-y2xh21Y-_2-Q", "l6e5AqxAybbXLR6JDZGAvQ", "Y5Ksm5XXnoRBIT0Yo9Y2tA", "ZOlaZcBNsJpGElMdV_9mgA", "Qekog4wpckRgvRtLfYtRPg", "tCSQSQHKh_FooZSarXIEXQ", "IghRrTimM7EWs47efin2Rw", "EqOQAAniB8iN0lhbBH6UtQ", "1ZtbDdNk9WVQdpg21IFSsg"]
-
-//    let panoIds = ["PX6YfpzfUrt9uZSU1w0jgw", "lX_7bJrRcKYSc1TavLjEpA", "6OFOxdNE0bPOeIimGEZdww", "fW9Xcvf3Ruu6-3ztX98Atg", "Wa1lL6Gxwn5KpD8kNdwyGw", "M8OhPIPtPwUKVrVAaLB0Bg", "gGJFmV7F8390zQ7P-O53yw", "f1n1xnMpRTaqwxyX61I4-g", "9MPchhFmorzbgJojawhwog", "R1mfPYyD6b6mZTrvNfcYHw", "Z725BFV4tBx__LEbhkMqaA", "ITFc25E1U68uRvg1D9KHSg", "1c1bOspjxda0DqgboGkTcA", "SoMjaYiGi_ptXjWI775K6g"]
-    
-//    let panoIds = ["8M0oSy72ZpFk4J3un7SP_Q", "AAjXHanNaa7Dtqg2EJVeJw", "iomOIUdQxOrEDNwCcYZezA", "lr1iiI-kK-y2xh21Y-_2-Q", "l6e5AqxAybbXLR6JDZGAvQ", "Y5Ksm5XXnoRBIT0Yo9Y2tA", "ZOlaZcBNsJpGElMdV_9mgA", "Qekog4wpckRgvRtLfYtRPg", "tCSQSQHKh_FooZSarXIEXQ", "IghRrTimM7EWs47efin2Rw", "EqOQAAniB8iN0lhbBH6UtQ", "1ZtbDdNk9WVQdpg21IFSsg"]
-    
-//    let panoIds = ["1Dy-VwTcyuQvB5I_-7_2Rw", "Bkj5T7_ucCqszo041xDzYA", "Po_C7wwaeWUCogm7AlcG2w", "o_if0Nlc0rPFareD1jew1w", "jExha2UWpDyCoWF_k83z_A", "9tSX6Us59MBve8kZtJkEMA", "4fTr34kJu9FM_7KQ9M77bQ", "e2KORPNObCvD878fUZxalQ", "jB0WxPBjOcXBwSjp1ZbkOQ", "bz2f1lKHqBBL1-YeAb5gWg"]
-    
-    let panoIds = ["ydgoRUaihAL1HsBupYpg3g", "z0zIzWF1FXzlFLbzlyJGDA", "NT4T3bzg2Kcy3F8EuEDTyQ", "y_sXV7q2KnaeCy-WzG54fw", "43OS4Wqy_dVOt9VrC0CufA", "z7G09QmArnIAAAGusfdMqA", "KtpAFSPqmnUJDPtl2ER_KA", "yL1L01_gz-xtT63A474-qw", "cdyOxiQyyiUhVWeAPgd7jg", "Qvw_KZpSwAsP6-vIycF-Nw", "nckLYnNw1BA6Bdt4MLZJiA", "BjaJWJM1A4cAAAQYWWv-Qw", "NMpc8Tf9lStL3v0zsPbRUA", "Ruh4v3MJ7HQAAAQfDU3OlA", "IfQUtYCsXT0AAAQqargRfw", "_FVxOVvg67PO2p74igUtdQ"]
-    
-//    let panoIds = ["LS2ysGGsA7qFZwTgByApgA", "6JGJk7avMBL4ENdpV_W3CQ", "oxXGPISsU9Q_sIFiHjICag"]
+    var panoIds:[String]!
     
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     
@@ -79,39 +93,6 @@ class PanoViewController: UIViewController {
         panoView.navigationLinksHidden = true
         panoView.delegate = self
         self.view.addSubview(panoView)
-        
-        // Set panorama coordinates
-//        if (coordinate == nil) {
-//           coordinate = CLLocationCoordinate2DMake(37.7737729,-122.408536)
-//        }
-//        panoView.moveNearCoordinate(coordinate!, radius: 500)
-        panoView.moveToPanoramaID(panoIds[panoIds.count - 1])
-        
-        //TODO: put this in a function/script
-//        var panoData = PFObject(className:"PanoData")
-//        panoData["latitude"] = coordinate!.latitude
-//        panoData["longitude"] = coordinate!.longitude
-//        panoData["panoDateDict"] = panoDateDict
-//        
-//        panoData.saveInBackgroundWithBlock {
-//            (success: Bool, error: NSError?) -> Void in
-//            if (success) {
-//                print("has been saved")
-//            } else {
-//                print(error?.description)
-//            }
-//        }
-        
-        //TEMP: code snippet to fetch from parse - xfz
-//        var query = PFQuery(className:"PanoData")
-//        query.getObjectInBackgroundWithId("9fNLFJ6q1c") {
-//            (panodata: PFObject?, error: NSError?) -> Void in
-//            if error == nil && panodata != nil {
-//                print(panodata)
-//            } else {
-//                print(error)
-//            }
-//        }
 
         // Set panorama camera to update with device motion (if motion sensors are available)
         motionManager = CMMotionManager()
@@ -160,8 +141,6 @@ class PanoViewController: UIViewController {
         // Initialize slider
         sliderView = UISlider()
         sliderView.minimumValue = 0
-        sliderView.maximumValue = Float(panoIds.count - 1)
-        sliderView.value = sliderView.maximumValue
         sliderView.addTarget(self, action: "sliderValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         self.view.addSubview(sliderView)
         
