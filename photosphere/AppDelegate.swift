@@ -18,13 +18,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        // Set up Google Maps iOS API
         let kGoogleAPIKey = valueForAPIKey("GOOGLE_API_KEY")
         GMSServices.provideAPIKey(kGoogleAPIKey)
         
+        // Set up Parse API
         let parseAppId = valueForAPIKey("PARSE_APPLICATION_ID")
         let parseAPIKey = valueForAPIKey("PARSE_API_KEY")
-        
         Parse.setApplicationId(parseAppId, clientKey: parseAPIKey)
+
+        // Set up Google Maps Javascript API
+        GoogleMapsJSWrapper.sharedInstance
         
         return true
     }
