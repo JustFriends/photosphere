@@ -234,9 +234,14 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     func setupMapsButton() {
         //create button
         let screenWidth = self.view.frame.size.width
-        let size = CGFloat(60)
-        let frame = CGRectMake(screenWidth - size, 0, size, size)
+        let screenHeight = self.view.frame.size.height
+        let size = CGFloat(40)
+        let frame = CGRectMake(screenWidth - (size + 15), 15, size, size)
         mapsButton.frame = frame
+        mapsButton.backgroundColor = UIColor.clearColor()
+        mapsButton.layer.cornerRadius = 5
+        mapsButton.layer.borderWidth = 1
+        mapsButton.layer.borderColor = UIColor.blueColor().CGColor
         
         //add image
         let image = UIImage(named: "maps-icon") as UIImage?
