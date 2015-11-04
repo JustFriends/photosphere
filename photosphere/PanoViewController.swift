@@ -57,13 +57,28 @@ class PanoViewController: UIViewController {
                         
                         self.panoIds = entry["panoIds"] as! [String]
                         self.curPanoIdx = self.panoIds.count - 1
+                        self.panoView.navigationLinksHidden = true
+                        self.panoView.navigationGestures = false
                         self.panoView.moveToPanoramaID(self.panoIds[self.curPanoIdx])
                         
+                        self.sliderView.hidden = false
                         self.sliderView.maximumValue = Float(self.panoIds.count - 1)
                         self.sliderView.value = self.sliderView.maximumValue
                         
                         if (self.context != nil) {
                             let scriptString = "sv.getPanorama({pano: '\(self.panoIds[self.curPanoIdx])'}, processSVData);"
+                            self.context.evaluateScript(scriptString)
+                        }
+                    } else {
+                        self.sliderView.hidden = true
+                        
+                        self.panoView.navigationLinksHidden = false
+                        self.panoView.navigationGestures = true
+                        self.panoView.moveNearCoordinate(self.coordinate!, radius: 500)
+                        
+                        if (self.context != nil) {
+                            let curPanoID = self.panoView.panorama.panoramaID
+                            let scriptString = "sv.getPanorama({pano: '\(curPanoID)'}, processSVData);"
                             self.context.evaluateScript(scriptString)
                         }
                     }
@@ -229,9 +244,11 @@ extension PanoViewController: UIWebViewDelegate {
         // Initialize an instance of StreetViewService
         context.evaluateScript("var sv = new google.maps.StreetViewService();")
         
-        let curPanoID = panoView.panorama.panoramaID
-        let scriptString = "sv.getPanorama({pano: '\(curPanoID)'}, processSVData);"
-        context.evaluateScript(scriptString)
+        if panoView.panorama != nil {
+            let curPanoID = panoView.panorama.panoramaID
+            let scriptString = "sv.getPanorama({pano: '\(curPanoID)'}, processSVData);"
+            context.evaluateScript(scriptString)
+        }
     }
     
     func backButtonTapped() -> () {
