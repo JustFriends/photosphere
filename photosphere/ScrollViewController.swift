@@ -113,6 +113,12 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
                 print("Place attributions \(place.attributions)")
                 print("Place coordinates \(place.coordinate)")
                 self.coordinate = CLLocationCoordinate2DMake(place.coordinate.latitude, place.coordinate.longitude)
+                if self.coordinate != nil {
+                    self.panoViewController.coordinate = self.coordinate
+                } else {
+                    self.panoViewController.coordinate = CLLocationCoordinate2DMake(40.71288,-74.0140183)
+                }
+                self.presentViewController(self.panoViewController, animated: true, completion: nil)
             } else {
                 print("No place selected")
             }
@@ -148,11 +154,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         //print(self.placesArray)
         scrollView.frame = self.view.bounds
         //print(scrollView.frame)
-        let contentWidth = scrollView.bounds.width
-        let contentHeight = scrollView.bounds.height
-        scrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
-        
-        scrollView.contentSize = CGSizeMake(CGFloat(self.scrollView.subviews.count)*scrollView.bounds.width, scrollView.bounds.height)
+
         scrollView.pagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
         
@@ -193,16 +195,25 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
                 let lat = object["latitude"]
                 let long = object["longitude"]
                 let view = UIImageView(frame: CGRectMake(CGFloat(i)*pageWidth, 0, pageWidth, pageHeight))
-                let urlString = "https://maps.googleapis.com/maps/api/streetview?location=\(lat),\(long)&size=\(Int(pageWidth))x\(Int(pageHeight))"
+                if (object.objectForKey("previewImageURL") != nil) {
+                    view.setImageWithURL(NSURL(string: object["previewImageURL"] as! String)!)
+                } else {
+                    view.setImageWithURL(NSURL(string: "https://maps.googleapis.com/maps/api/streetview?location=\(lat),\(long)&size=\(Int(pageWidth))x\(Int(pageHeight))")!)
+                }
+
                 //print(urlString)
-                view.setImageWithURL(NSURL(string: urlString)!)
+
                 scrollView.addSubview(view)
+                addLabelToImageView(object["description"] as! String, imageView: view)
             }
         }
 
         for subview in scrollView.subviews {
             addGestureRecognizerToPage(subview)
         }
+
+        scrollView.contentSize = CGSizeMake(CGFloat(self.scrollView.subviews.count)*scrollView.frame.width, scrollView.frame.height)
+
         scrollView.delegate = self
     }
 
@@ -214,9 +225,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
             pageControl.numberOfPages = placesArray.count
         }
 
-        let size = CGFloat(60)
+        let size = CGFloat(45)
         let screenWidth = self.view.frame.size.width
-        pageControl.frame = CGRectMake((screenWidth / 2) - (size / 2), UIScreen.mainScreen().bounds.height-60, size, size)
+        pageControl.frame = CGRectMake((screenWidth / 2) - (size / 2), UIScreen.mainScreen().bounds.height-75, size, size)
         pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
     }
     
@@ -224,7 +235,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         //create button
         let screenWidth = self.view.frame.size.width
         let size = CGFloat(60)
-        let frame = CGRectMake((screenWidth / 2) - (size / 2), 30, size, size)
+        let frame = CGRectMake(screenWidth - size, 0, size, size)
         mapsButton.frame = frame
         
         //add image
@@ -239,6 +250,23 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         addGestureRecognizerToMapsButton()
     }
     
+    func addLabelToImageView(string: String, imageView: UIImageView) {
+        let size = CGFloat(250)
+        let screenWidth = self.view.frame.size.width
+        let frame = CGRectMake((0), UIScreen.mainScreen().bounds.height-65, screenWidth, 65)
+
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+        visualEffectView.frame = frame
+        imageView.addSubview(visualEffectView)
+
+        let label = UILabel(frame: visualEffectView.contentView.bounds)
+        label.text = string
+        label.textColor = UIColor(white: 1, alpha: 1)
+        label.textAlignment = .Center
+        label.font = UIFont(name: "HelveticaNeue", size: 20)
+        visualEffectView.contentView.addSubview(label)
+    }
+
     func addGestureRecognizerToMapsButton() {
         let tap = UITapGestureRecognizer(target: self, action: "tapMapsButton:")
         tap.numberOfTapsRequired = 1
@@ -246,7 +274,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     }
     
     func tapMapsButton(recognizer: UITapGestureRecognizer) {
-        requestLocation(-25.6867,long: -54.4447)
+        requestLocation(40.712584,long: -74.014265)
         //requestLocation(40.71288,long:-74.0140183)
         //print("tapped map")
         //get coordinates from page clicked here
@@ -285,7 +313,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         } else {
             self.panoViewController.coordinate = CLLocationCoordinate2DMake(40.71288,-74.0140183)
         }
-        self.presentViewController(panoViewController, animated: true, completion: nil)
+        self.presentViewController(self.panoViewController, animated: true, completion: nil)
     }
     
     // MARK: - Zooming: http://www.appcoda.com/uiscrollview-introduction/
