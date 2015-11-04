@@ -10,23 +10,32 @@ import UIKit
 import GoogleMaps
 import CoreMotion
 import Parse
+import JavaScriptCore
 
-class PanoViewController: UIViewController, GMSMapViewDelegate {
+class PanoViewController: UIViewController {
     
     /** Panorama Viewer **/
     var panoView: GMSPanoramaView!
     
-    /** UISlider Constants **/
+    /** UISlider for Transitioning Panoramas **/
     var sliderView: UISlider!
-    let sliderOffsetX: CGFloat = 50
+    let sliderOffsetX: CGFloat = 80
     let sliderOffsetY: CGFloat = 40
     let sliderHeight: CGFloat = 15
     
-    /** UIButton Constants **/
+    /** Back Button **/
     var backButton: UIButton!
     let buttonOffsetX: CGFloat = 10
     let buttonOffsetY: CGFloat = 10
     let buttonSideLength: CGFloat = 32
+    
+    /** UIWebView for Javascript Queries **/
+    var webView: UIWebView!
+    var context: JSContext!
+    
+    /** Date Label **/
+    var dateLabel: UILabel!
+    var dateLabelOffsetY: CGFloat = 10
     
     /** Core Motion Variables **/
     var motionManager: CMMotionManager!
@@ -38,60 +47,45 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
     /** Lat/Lng Viewer Coordinates **/
     var coordinate: CLLocationCoordinate2D?
     
+    /** PanoIDs **/
     var curPanoIdx:Int = 0
-    let panoIds = ["8M0oSy72ZpFk4J3un7SP_Q", "AAjXHanNaa7Dtqg2EJVeJw", "iomOIUdQxOrEDNwCcYZezA", "lr1iiI-kK-y2xh21Y-_2-Q", "l6e5AqxAybbXLR6JDZGAvQ", "Y5Ksm5XXnoRBIT0Yo9Y2tA", "ZOlaZcBNsJpGElMdV_9mgA", "Qekog4wpckRgvRtLfYtRPg", "tCSQSQHKh_FooZSarXIEXQ", "IghRrTimM7EWs47efin2Rw", "EqOQAAniB8iN0lhbBH6UtQ", "1ZtbDdNk9WVQdpg21IFSsg"]
     
-    //let panoDateDict: [String:String] = Dictionary()
-    let panoDateDict = ["8M0oSy72ZpFk4J3un7SP_Q": "Nov 2007", "AAjXHanNaa7Dtqg2EJVeJw": "Jul 2009", "iomOIUdQxOrEDNwCcYZezA":"Feb 2011", "lr1iiI-kK-y2xh21Y-_2-Q":"May 2013", "l6e5AqxAybbXLR6JDZGAvQ":"Nov 2013", "Y5Ksm5XXnoRBIT0Yo9Y2tA":"Jan 2014", "ZOlaZcBNsJpGElMdV_9mgA":"Jun 2014", "Qekog4wpckRgvRtLfYtRPg":"Jul 2014", "tCSQSQHKh_FooZSarXIEXQ":"Oct 2014", "IghRrTimM7EWs47efin2Rw":"Feb 2015", "EqOQAAniB8iN0lhbBH6UtQ":"Jun 2015", "1ZtbDdNk9WVQdpg21IFSsg":"Jul 2015"]
-    
+//    let panoIds = ["8M0oSy72ZpFk4J3un7SP_Q", "AAjXHanNaa7Dtqg2EJVeJw", "iomOIUdQxOrEDNwCcYZezA", "lr1iiI-kK-y2xh21Y-_2-Q", "l6e5AqxAybbXLR6JDZGAvQ", "Y5Ksm5XXnoRBIT0Yo9Y2tA", "ZOlaZcBNsJpGElMdV_9mgA", "Qekog4wpckRgvRtLfYtRPg", "tCSQSQHKh_FooZSarXIEXQ", "IghRrTimM7EWs47efin2Rw", "EqOQAAniB8iN0lhbBH6UtQ", "1ZtbDdNk9WVQdpg21IFSsg"]
 
 //    let panoIds = ["PX6YfpzfUrt9uZSU1w0jgw", "lX_7bJrRcKYSc1TavLjEpA", "6OFOxdNE0bPOeIimGEZdww", "fW9Xcvf3Ruu6-3ztX98Atg", "Wa1lL6Gxwn5KpD8kNdwyGw", "M8OhPIPtPwUKVrVAaLB0Bg", "gGJFmV7F8390zQ7P-O53yw", "f1n1xnMpRTaqwxyX61I4-g", "9MPchhFmorzbgJojawhwog", "R1mfPYyD6b6mZTrvNfcYHw", "Z725BFV4tBx__LEbhkMqaA", "ITFc25E1U68uRvg1D9KHSg", "1c1bOspjxda0DqgboGkTcA", "SoMjaYiGi_ptXjWI775K6g"]
+    
+//    let panoIds = ["8M0oSy72ZpFk4J3un7SP_Q", "AAjXHanNaa7Dtqg2EJVeJw", "iomOIUdQxOrEDNwCcYZezA", "lr1iiI-kK-y2xh21Y-_2-Q", "l6e5AqxAybbXLR6JDZGAvQ", "Y5Ksm5XXnoRBIT0Yo9Y2tA", "ZOlaZcBNsJpGElMdV_9mgA", "Qekog4wpckRgvRtLfYtRPg", "tCSQSQHKh_FooZSarXIEXQ", "IghRrTimM7EWs47efin2Rw", "EqOQAAniB8iN0lhbBH6UtQ", "1ZtbDdNk9WVQdpg21IFSsg"]
+    
+//    let panoIds = ["1Dy-VwTcyuQvB5I_-7_2Rw", "Bkj5T7_ucCqszo041xDzYA", "Po_C7wwaeWUCogm7AlcG2w", "o_if0Nlc0rPFareD1jew1w", "jExha2UWpDyCoWF_k83z_A", "9tSX6Us59MBve8kZtJkEMA", "4fTr34kJu9FM_7KQ9M77bQ", "e2KORPNObCvD878fUZxalQ", "jB0WxPBjOcXBwSjp1ZbkOQ", "bz2f1lKHqBBL1-YeAb5gWg"]
+    
+    let panoIds = ["ydgoRUaihAL1HsBupYpg3g", "z0zIzWF1FXzlFLbzlyJGDA", "NT4T3bzg2Kcy3F8EuEDTyQ", "y_sXV7q2KnaeCy-WzG54fw", "43OS4Wqy_dVOt9VrC0CufA", "z7G09QmArnIAAAGusfdMqA", "KtpAFSPqmnUJDPtl2ER_KA", "yL1L01_gz-xtT63A474-qw", "cdyOxiQyyiUhVWeAPgd7jg", "Qvw_KZpSwAsP6-vIycF-Nw", "nckLYnNw1BA6Bdt4MLZJiA", "BjaJWJM1A4cAAAQYWWv-Qw", "NMpc8Tf9lStL3v0zsPbRUA", "Ruh4v3MJ7HQAAAQfDU3OlA", "IfQUtYCsXT0AAAQqargRfw", "_FVxOVvg67PO2p74igUtdQ"]
+    
+//    let panoIds = ["LS2ysGGsA7qFZwTgByApgA", "6JGJk7avMBL4ENdpV_W3CQ", "oxXGPISsU9Q_sIFiHjICag"]
+    
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Ferry Building (37.7944876,-122.3948276)
-//        let panoramaNear = CLLocationCoordinate2DMake(37.7944876,-122.3948276)
-//        panoView.moveToPanoramaID("PX6YfpzfUrt9uZSU1w0jgw") // Mar 2008
-//        panoView.moveToPanoramaID("lX_7bJrRcKYSc1TavLjEpA") // Apr 2008
-//        panoView.moveToPanoramaID("6OFOxdNE0bPOeIimGEZdww") // Jul 2009
-//        panoView.moveToPanoramaID("fW9Xcvf3Ruu6-3ztX98Atg") // Apr 2011
-//        panoView.moveToPanoramaID("Wa1lL6Gxwn5KpD8kNdwyGw") // May 2013
-//        panoView.moveToPanoramaID("M8OhPIPtPwUKVrVAaLB0Bg") // Jun 2013
-//        panoView.moveToPanoramaID("gGJFmV7F8390zQ7P-O53yw") // Feb 2014
-//        panoView.moveToPanoramaID("f1n1xnMpRTaqwxyX61I4-g") // Apr 2014
-//        panoView.moveToPanoramaID("9MPchhFmorzbgJojawhwog") // May 2014
-//        panoView.moveToPanoramaID("R1mfPYyD6b6mZTrvNfcYHw") // Jun 2014
-//        panoView.moveToPanoramaID("Z725BFV4tBx__LEbhkMqaA") // Aug 2014
-//        panoView.moveToPanoramaID("ITFc25E1U68uRvg1D9KHSg") // Nov 2014
-//        panoView.moveToPanoramaID("1c1bOspjxda0DqgboGkTcA") // Jan 2015
-//        panoView.moveToPanoramaID("SoMjaYiGi_ptXjWI775K6g") // Jul 2015
-        
-        // 8th & Harrison (37.7737729,-122.408536)
-//        panoView.moveToPanoramaID("8M0oSy72ZpFk4J3un7SP_Q") // Nov 2007
-//        panoView.moveToPanoramaID("AAjXHanNaa7Dtqg2EJVeJw") // Jul 2009
-//        panoView.moveToPanoramaID("iomOIUdQxOrEDNwCcYZezA") // Feb 2011
-//        panoView.moveToPanoramaID("lr1iiI-kK-y2xh21Y-_2-Q") // May 2013
-//        panoView.moveToPanoramaID("l6e5AqxAybbXLR6JDZGAvQ") // Nov 2013
-//        panoView.moveToPanoramaID("Y5Ksm5XXnoRBIT0Yo9Y2tA") // Jan 2014
-//        panoView.moveToPanoramaID("ZOlaZcBNsJpGElMdV_9mgA") // Jun 2014
-//        panoView.moveToPanoramaID("Qekog4wpckRgvRtLfYtRPg") // Jul 2014
-//        panoView.moveToPanoramaID("tCSQSQHKh_FooZSarXIEXQ") // Oct 2014
-//        panoView.moveToPanoramaID("IghRrTimM7EWs47efin2Rw") // Feb 2015
-//        panoView.moveToPanoramaID("EqOQAAniB8iN0lhbBH6UtQ") // Jun 2015
-//        panoView.moveToPanoramaID("1ZtbDdNk9WVQdpg21IFSsg") // Jul 2015
+        // Initialize webview
+        webView = UIWebView()
+        webView.delegate = self
+        let srcString:String! = "<script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true\"></script>>"
+        webView.loadHTMLString(srcString, baseURL: nil)
         
         // Initialize panorama viewer
         panoView = GMSPanoramaView()
         panoView.streetNamesHidden = true
         panoView.navigationLinksHidden = true
+        panoView.delegate = self
         self.view.addSubview(panoView)
         
         // Set panorama coordinates
-        if (coordinate == nil) {
-           panoView.moveNearCoordinate(CLLocationCoordinate2DMake(37.7737729,-122.408536))
-        }
-        panoView.moveNearCoordinate(coordinate!, radius: 500)
+//        if (coordinate == nil) {
+//           coordinate = CLLocationCoordinate2DMake(37.7737729,-122.408536)
+//        }
+//        panoView.moveNearCoordinate(coordinate!, radius: 500)
+        panoView.moveToPanoramaID(panoIds[panoIds.count - 1])
         
         //TODO: put this in a function/script
 //        var panoData = PFObject(className:"PanoData")
@@ -109,15 +103,15 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
 //        }
         
         //TEMP: code snippet to fetch from parse - xfz
-        var query = PFQuery(className:"PanoData")
-        query.getObjectInBackgroundWithId("9fNLFJ6q1c") {
-            (panodata: PFObject?, error: NSError?) -> Void in
-            if error == nil && panodata != nil {
-                print(panodata)
-            } else {
-                print(error)
-            }
-        }
+//        var query = PFQuery(className:"PanoData")
+//        query.getObjectInBackgroundWithId("9fNLFJ6q1c") {
+//            (panodata: PFObject?, error: NSError?) -> Void in
+//            if error == nil && panodata != nil {
+//                print(panodata)
+//            } else {
+//                print(error)
+//            }
+//        }
 
         // Set panorama camera to update with device motion (if motion sensors are available)
         motionManager = CMMotionManager()
@@ -167,6 +161,7 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         sliderView = UISlider()
         sliderView.minimumValue = 0
         sliderView.maximumValue = Float(panoIds.count - 1)
+        sliderView.value = sliderView.maximumValue
         sliderView.addTarget(self, action: "sliderValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         self.view.addSubview(sliderView)
         
@@ -176,6 +171,17 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         backButton.setImage(backImage, forState: UIControlState.Normal)
         backButton.addTarget(self, action: "backButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backButton)
+        
+        // Initialize date label
+        dateLabel = UILabel(frame: CGRectMake(150, dateLabelOffsetY, 120, 50))
+        dateLabel.backgroundColor = UIColor.blackColor()
+        dateLabel.alpha = 0
+        dateLabel.layer.cornerRadius = 3
+        dateLabel.clipsToBounds = true
+        dateLabel.font = UIFont(name: "HelveticaNeue", size: 18)
+        dateLabel.textAlignment = NSTextAlignment.Center
+        dateLabel.textColor = UIColor.whiteColor()
+        self.view.addSubview(dateLabel)
     }
 
     override func viewWillLayoutSubviews() {
@@ -185,6 +191,9 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         // Layout slider
         sliderView.frame = CGRectMake(CGRectGetMinX(self.view.bounds) + sliderOffsetX, CGRectGetMaxY(self.view.bounds) - sliderOffsetY,
             self.view.bounds.width - 2 * sliderOffsetX, sliderHeight)
+        
+        // Layout date label
+        dateLabel.frame = CGRectMake((self.view.bounds.width - dateLabel.bounds.width)/2, dateLabelOffsetY, dateLabel.bounds.width, dateLabel.bounds.height)
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -205,11 +214,78 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         if curIdx != curPanoIdx {
             panoView.moveToPanoramaID(panoIds[curIdx])
             curPanoIdx = curIdx
+            if (context != nil) {
+                let scriptString = "sv.getPanorama({pano: '\(panoIds[curIdx])'}, processSVData);"
+                context.evaluateScript(scriptString)
+            }
         }
+    }
+}
+
+extension PanoViewController: UIWebViewDelegate {
+    func webViewDidFinishLoad(webView: UIWebView) {
+        // Get Javascript context from webview
+        context = webView.valueForKeyPath("documentView.webView.mainFrame.javaScriptContext") as! JSContext
+        
+        // Output any javascript exceptions as they occur
+        context!.exceptionHandler = { context, exception in
+            print("JS Error: \(exception)")
+        }
+        
+        // Setup a callback function for javascript to call after fetching panorama date
+        let updateDateLabel: @convention(block) String -> () = { inputString in
+            self.dateLabel.text = self.getDateLabelString(inputString)
+            if (self.dateLabel.alpha == 0) {
+                UIView.animateWithDuration(0.5) {
+                    self.dateLabel.alpha = 0.7
+                }
+            }
+        }
+        context.setObject(unsafeBitCast(updateDateLabel, AnyObject.self), forKeyedSubscript: "updateDateLabel")
+        
+        // Set up a callback function in javascript that calls the above callback function
+        let funcString = "function processSVData(data, status) {  if (status === google.maps.StreetViewStatus.OK) { updateDateLabel(data.imageDate) } }"
+        context.evaluateScript(funcString)
+        
+        // Initialize an instance of StreetViewService
+        context.evaluateScript("var sv = new google.maps.StreetViewService();")
+        
+        let curPanoID = panoView.panorama.panoramaID
+        let scriptString = "sv.getPanorama({pano: '\(curPanoID)'}, processSVData);"
+        context.evaluateScript(scriptString)
     }
     
     func backButtonTapped() -> () {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    func getDateLabelString(oldString: String) -> String {
+        let dateComponents = oldString.characters.split{$0 == "-"}.map(String.init)
+        let yearString = dateComponents[0]
+        let monthString = months[Int(dateComponents[1])! - 1]
+        return monthString + " " + yearString
+    }
 }
 
+extension PanoViewController: GMSPanoramaViewDelegate {
+    func panoramaView(view: GMSPanoramaView!, willMoveToPanoramaID panoramaID: String!) {
+        if (context != nil) {
+            let scriptString = "sv.getPanorama({pano: '\(panoramaID)'}, processSVData);"
+            context.evaluateScript(scriptString)
+        }
+    }
+    
+    func panoramaView(view: GMSPanoramaView!, error: NSError!, onMoveToPanoramaID panoramaID: String!) {
+        if (context != nil) {
+            let scriptString = "sv.getPanorama({pano: '\(panoramaID)'}, processSVData);"
+            context.evaluateScript(scriptString)
+        }
+    }
+    
+    func panoramaView(view: GMSPanoramaView!, error: NSError!, didMoveToPanoramaID panoramaID: String!) {
+        if (context != nil) {
+            let scriptString = "sv.getPanorama({pano: '\(panoramaID)'}, processSVData);"
+            context.evaluateScript(scriptString)
+        }
+    }
+}
