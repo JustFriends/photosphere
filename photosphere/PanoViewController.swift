@@ -22,6 +22,12 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
     let sliderOffsetY: CGFloat = 40
     let sliderHeight: CGFloat = 15
     
+    /** UIButton Constants **/
+    var backButton: UIButton!
+    let buttonOffsetX: CGFloat = 10
+    let buttonOffsetY: CGFloat = 10
+    let buttonSideLength: CGFloat = 32
+    
     /** Core Motion Variables **/
     var motionManager: CMMotionManager!
     let FRAMES_PER_SECOND: Double = 30.0    // How often we update the camera
@@ -43,7 +49,6 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         // Ferry Building (37.7944876,-122.3948276)
 //        let panoramaNear = CLLocationCoordinate2DMake(37.7944876,-122.3948276)
@@ -150,7 +155,9 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
 //                        print("gx:\(motion!.gravity.x), gy:\(motion!.gravity.y), gz:\(motion!.gravity.z)")
                         
                         // Update panorama viewer camera
-                        self!.panoView.camera = GMSPanoramaCamera(heading: self!.viewerYaw, pitch:gx * roll - 90, zoom:1)
+                        let viewerHeading = self!.viewerYaw + (gx > 0 ? 180 : 0)
+                        let viewerPitch = gx * roll - 90
+                        self!.panoView.camera = GMSPanoramaCamera(heading: viewerHeading, pitch:viewerPitch, zoom:1)
                     }
                 }
             })
@@ -162,6 +169,13 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
         sliderView.maximumValue = Float(panoIds.count - 1)
         sliderView.addTarget(self, action: "sliderValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         self.view.addSubview(sliderView)
+        
+        // Initialize back button
+        backButton = UIButton(frame: CGRectMake(buttonOffsetX, buttonOffsetY, buttonSideLength, buttonSideLength))
+        let backImage = UIImage(named:"backIcon")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        backButton.setImage(backImage, forState: UIControlState.Normal)
+        backButton.addTarget(self, action: "backButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(backButton)
     }
 
     override func viewWillLayoutSubviews() {
@@ -174,7 +188,7 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.All
+        return UIInterfaceOrientationMask.Landscape
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -192,6 +206,10 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
             panoView.moveToPanoramaID(panoIds[curIdx])
             curPanoIdx = curIdx
         }
+    }
+    
+    func backButtonTapped() -> () {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
