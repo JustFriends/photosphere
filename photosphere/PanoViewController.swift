@@ -104,15 +104,15 @@ class PanoViewController: UIViewController, GMSMapViewDelegate {
 //        }
         
         //TEMP: code snippet to fetch from parse - xfz
-        var query = PFQuery(className:"PanoData")
-        query.getObjectInBackgroundWithId("9fNLFJ6q1c") {
-            (panodata: PFObject?, error: NSError?) -> Void in
-            if error == nil && panodata != nil {
-                print(panodata)
-            } else {
-                print(error)
-            }
-        }
+//        var query = PFQuery(className:"PanoData")
+//        query.getObjectInBackgroundWithId("9fNLFJ6q1c") {
+//            (panodata: PFObject?, error: NSError?) -> Void in
+//            if error == nil && panodata != nil {
+//                print(panodata)
+//            } else {
+//                print(error)
+//            }
+//        }
 
         // Set panorama camera to update with device motion (if motion sensors are available)
         motionManager = CMMotionManager()

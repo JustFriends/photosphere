@@ -23,12 +23,14 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     var placesClient: GMSPlacesClient?
     var placePicker: GMSPlacePicker?
 
-    var placesArray: [AnyObject]?
+    var placesArray: [PFObject] = []
+    var placesSubviewsArray: [UIImageView] = []
 
     var coordinate: CLLocationCoordinate2D?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //self.placesArray = []
         
         panoViewController = PanoViewController()
         mapViewController = MapViewController()
@@ -53,10 +55,20 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
                 // The find succeeded.
                 print("Successfully retrieved \(objects!.count) scores.")
                 // Do something with the found objects
-                if let objects = objects as? [PFObject]! {
+                if let objects = objects as [PFObject]! {
                     for object in objects {
-                        print(object.objectId)
-                        self.placesArray?.append(object)
+                        //print(object.objectId)
+                        //let lat = object["latitude"]
+                        //print("latitude: \(lat)")
+                        self.placesArray.append(object)
+                        //print("loaded data into places array")
+                        //print(self.placesArray)
+
+                    }
+                    if (self.placesArray.count == objects.count) {
+                        self.setupScrollView()
+                        self.setupPageControl()
+                        self.setupMapsButton()
                     }
                 }
             } else {
@@ -132,8 +144,10 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     }
 
     func setupScrollView() {
+        //print("setting up scroll view")
+        //print(self.placesArray)
         scrollView.frame = self.view.bounds
-        print(scrollView.frame)
+        //print(scrollView.frame)
         let contentWidth = scrollView.bounds.width
         let contentHeight = scrollView.bounds.height
         scrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
@@ -148,37 +162,58 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         for subview in scrollView.subviews {
             subview.removeFromSuperview()
         }
+        
+        if (self.placesArray.count == 0) {
+            //print("nil places array")
+            //let view1 = UIView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
+            let view1 = UIImageView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
 
-        //let view1 = UIView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
-        let view1 = UIImageView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
-        
-        let urlString = "https://maps.googleapis.com/maps/api/streetview?location=37.7737729,-122.408536&size=\(Int(pageWidth))x\(Int(pageHeight))"
-        print(urlString)
-        view1.setImageWithURL(NSURL(string: urlString)!)
-        //view1.setImageWithURL(NSURL(string: "https://maps.googleapis.com/maps/api/streetview?location=37.7737729,-122.408536&size=375x667")!)
-        
-        //view1.backgroundColor = UIColor(patternImage: UIImage(named: "8th&Harrison")!)
-        //view1.backgroundColor = UIColor.blueColor()
+            let urlString = "https://maps.googleapis.com/maps/api/streetview?location=37.7737729,-122.408536&size=\(Int(pageWidth))x\(Int(pageHeight))"
+            //print(urlString)
+            view1.setImageWithURL(NSURL(string: urlString)!)
+            //view1.setImageWithURL(NSURL(string: "https://maps.googleapis.com/maps/api/streetview?location=37.7737729,-122.408536&size=375x667")!)
 
-        let view2 = UIView(frame: CGRectMake(pageWidth, 0, pageWidth, pageHeight))
-        view2.backgroundColor = UIColor.orangeColor()
-        let view3 = UIView(frame: CGRectMake(2*pageWidth, 0, pageWidth, pageHeight))
-        view3.backgroundColor = UIColor.purpleColor()
-        
-        scrollView.addSubview(view1)
-        scrollView.addSubview(view2)
-        scrollView.addSubview(view3)
-        
+            //view1.backgroundColor = UIColor(patternImage: UIImage(named: "8th&Harrison")!)
+            //view1.backgroundColor = UIColor.blueColor()
+
+            let view2 = UIView(frame: CGRectMake(pageWidth, 0, pageWidth, pageHeight))
+            view2.backgroundColor = UIColor.orangeColor()
+            let view3 = UIView(frame: CGRectMake(2*pageWidth, 0, pageWidth, pageHeight))
+            view3.backgroundColor = UIColor.purpleColor()
+
+            scrollView.addSubview(view1)
+            scrollView.addSubview(view2)
+            scrollView.addSubview(view3)
+        } else {
+            //print("places array is non nil")
+            for (var i = 0; i < self.placesArray.count; i++) {
+                let object = self.placesArray[i]
+                //print(object)
+                //print(object)
+                let lat = object["latitude"]
+                let long = object["longitude"]
+                let view = UIImageView(frame: CGRectMake(CGFloat(i)*pageWidth, 0, pageWidth, pageHeight))
+                let urlString = "https://maps.googleapis.com/maps/api/streetview?location=\(lat),\(long)&size=\(Int(pageWidth))x\(Int(pageHeight))"
+                //print(urlString)
+                view.setImageWithURL(NSURL(string: urlString)!)
+                scrollView.addSubview(view)
+            }
+        }
+
         for subview in scrollView.subviews {
             addGestureRecognizerToPage(subview)
         }
-
         scrollView.delegate = self
     }
 
     func setupPageControl() {
         //**should set numberOfPages dynamically
-        pageControl.numberOfPages = 3
+        if self.placesArray.count == 0 {
+            pageControl.numberOfPages = 3
+        } else {
+            pageControl.numberOfPages = placesArray.count
+        }
+
         let size = CGFloat(60)
         let screenWidth = self.view.frame.size.width
         pageControl.frame = CGRectMake((screenWidth / 2) - (size / 2), UIScreen.mainScreen().bounds.height-60, size, size)
@@ -213,9 +248,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     func tapMapsButton(recognizer: UITapGestureRecognizer) {
         requestLocation(-25.6867,long: -54.4447)
         //requestLocation(40.71288,long:-74.0140183)
-        print("tapped map")
+        //print("tapped map")
         //get coordinates from page clicked here
-        print(recognizer.view?.backgroundColor)
+        //print(recognizer.view?.backgroundColor)
         //self.mapViewController.coordinate = CLLocationCoordinate2DMake(40.71288,-74.0140183)
         //self.presentViewController(mapViewController, animated: true, completion: nil)
     }
@@ -235,6 +270,12 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     }
     
     func handleTap(recognizer: UITapGestureRecognizer) {
+        //print("current page \(pageControl.currentPage)")
+        if self.placesArray.count != 0 {
+            let place = self.placesArray[pageControl.currentPage]
+            //print(place)
+            self.coordinate = CLLocationCoordinate2DMake(place["latitude"] as! CLLocationDegrees, place["longitude"] as! CLLocationDegrees)
+        }
         //print("tapped")
         //get coordinates from page clicked here
         //print(recognizer.view?.backgroundColor)
