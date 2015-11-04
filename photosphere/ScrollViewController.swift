@@ -230,13 +230,14 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     func addGestureRecognizerToPage(page:UIView) {
         let tap = UITapGestureRecognizer(target: self, action: "handleTap:")
         tap.numberOfTapsRequired = 1
+        page.userInteractionEnabled = true
         page.addGestureRecognizer(tap)
     }
     
     func handleTap(recognizer: UITapGestureRecognizer) {
-        print("tapped")
+        //print("tapped")
         //get coordinates from page clicked here
-        print(recognizer.view?.backgroundColor)
+        //print(recognizer.view?.backgroundColor)
         //pass in a CLLocationCoordinate2D
         if self.coordinate != nil {
             self.panoViewController.coordinate = self.coordinate
