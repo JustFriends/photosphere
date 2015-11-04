@@ -178,7 +178,7 @@ class PanoViewController: UIViewController {
         dateLabel.alpha = 0
         dateLabel.layer.cornerRadius = 3
         dateLabel.clipsToBounds = true
-        dateLabel.font = UIFont(name: "HelveticaNeue-Regular", size: 24)
+        dateLabel.font = UIFont(name: "HelveticaNeue", size: 18)
         dateLabel.textAlignment = NSTextAlignment.Center
         dateLabel.textColor = UIColor.whiteColor()
         self.view.addSubview(dateLabel)
