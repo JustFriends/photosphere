@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 import GoogleMaps
+import Parse
 
 class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewControllerDelegate {
     var scrollView: UIScrollView!
@@ -21,6 +22,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     
     var placesClient: GMSPlacesClient?
     var placePicker: GMSPlacePicker?
+
+    var placesArray: [AnyObject]?
 
     var coordinate: CLLocationCoordinate2D?
 
@@ -41,6 +44,26 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         self.view.addSubview(self.mapsButton)
 
         placesClient = GMSPlacesClient()
+
+        let query = PFQuery(className:"PanoData")
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [PFObject]?, error: NSError?) -> Void in
+
+            if error == nil {
+                // The find succeeded.
+                print("Successfully retrieved \(objects!.count) scores.")
+                // Do something with the found objects
+                if let objects = objects as? [PFObject]! {
+                    for object in objects {
+                        print(object.objectId)
+                        self.placesArray?.append(object)
+                    }
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+            }
+        }
 
     }
 
