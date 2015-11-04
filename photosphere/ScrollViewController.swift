@@ -127,7 +127,10 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         }
 
         let view1 = UIView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
+        //UIImageView()
+        //view1.setImageWithURL(NSURL(fileURLWithPath: "http://www.hdiphonewallpapers.us/phone-wallpapers/iphone-4-wallpapers/hd-iphone-4-wallpapers-94ios.jpg"))
         view1.backgroundColor = UIColor.blueColor()
+
         let view2 = UIView(frame: CGRectMake(pageWidth, 0, pageWidth, pageHeight))
         view2.backgroundColor = UIColor.orangeColor()
         let view3 = UIView(frame: CGRectMake(2*pageWidth, 0, pageWidth, pageHeight))
@@ -147,6 +150,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     func setupPageControl() {
         //**should set numberOfPages dynamically
         pageControl.numberOfPages = 3
+        let size = CGFloat(60)
+        let screenWidth = self.view.frame.size.width
+        pageControl.frame = CGRectMake((screenWidth / 2) - (size / 2), UIScreen.mainScreen().bounds.height-60, size, size)
         pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
     }
     
