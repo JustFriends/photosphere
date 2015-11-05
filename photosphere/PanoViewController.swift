@@ -164,7 +164,7 @@ class PanoViewController: UIViewController {
         
         // Initialize back button
         backButton = UIButton(frame: CGRectMake(buttonOffsetX, buttonOffsetY, buttonSideLength, buttonSideLength))
-        let backImage = UIImage(named:"backIcon-1")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+        let backImage = UIImage(named:"backIcon-1")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
         backButton.setImage(backImage, forState: UIControlState.Normal)
         backButton.addTarget(self, action: "backButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backButton)
