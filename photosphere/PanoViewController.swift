@@ -21,7 +21,7 @@ class PanoViewController: UIViewController {
     var sliderView: UISlider!
     let sliderOffsetX: CGFloat = 80
     let sliderOffsetY: CGFloat = 40
-    let sliderHeight: CGFloat = 15
+    let sliderHeight: CGFloat = 20
     
     /** Back Button **/
     var backButton: UIButton!
@@ -36,6 +36,11 @@ class PanoViewController: UIViewController {
     /** Date Label **/
     var dateLabel: UILabel!
     var dateLabelOffsetY: CGFloat = 10
+    var dateLabelTargetAlpha: CGFloat = 0.7
+    var datelabelAnimateDuration: Double = 0.5
+    var dateLabelFadeOutDelay: Double = 2.0
+    var dispatchCount: Int = 0              // Keep track of in flight dispatches to only fade date label on last dispatch
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     
     /** Core Motion Variables **/
     var motionManager: CMMotionManager!
@@ -55,26 +60,26 @@ class PanoViewController: UIViewController {
                     self.dateLabel.alpha = 0
                     if let entry = objects?.first as PFObject! {
                         self.panoIds = entry["panoIds"] as! [String]
-                        self.curPanoIdx = self.panoIds.count - 1
+                        self.curPanoIdx = 0
                         self.panoView.navigationLinksHidden = true
                         self.panoView.navigationGestures = false
                         self.panoView.moveToPanoramaID(self.panoIds[self.curPanoIdx])
                         
                         self.sliderView.hidden = false
                         self.sliderView.maximumValue = Float(self.panoIds.count - 1)
-                        self.sliderView.value = self.sliderView.maximumValue
+                        self.sliderView.value = self.sliderView.minimumValue
                         
                         if (self.context != nil) {
                             let scriptString = "sv.getPanorama({pano: '\(self.panoIds[self.curPanoIdx])'}, processSVData);"
                             self.context.evaluateScript(scriptString)
                         }
                     } else {
-                        self.sliderView.hidden = true
-                        
                         self.panoIds = []
                         self.panoView.navigationLinksHidden = false
                         self.panoView.navigationGestures = true
                         self.panoView.moveNearCoordinate(self.coordinate!, radius: 500)
+                        
+                        self.sliderView.hidden = true
                         
                         if (self.context != nil) {
                             let curPanoID = self.panoView.panorama.panoramaID
@@ -90,8 +95,6 @@ class PanoViewController: UIViewController {
     /** PanoIDs **/
     var curPanoIdx:Int = 0
     var panoIds:[String]!
-    
-    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,7 +164,7 @@ class PanoViewController: UIViewController {
         
         // Initialize back button
         backButton = UIButton(frame: CGRectMake(buttonOffsetX, buttonOffsetY, buttonSideLength, buttonSideLength))
-        let backImage = UIImage(named:"backIcon")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        let backImage = UIImage(named:"backIcon-1")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
         backButton.setImage(backImage, forState: UIControlState.Normal)
         backButton.addTarget(self, action: "backButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backButton)
@@ -189,9 +192,13 @@ class PanoViewController: UIViewController {
         // Layout date label
         dateLabel.frame = CGRectMake((self.view.bounds.width - dateLabel.bounds.width)/2, dateLabelOffsetY, dateLabel.bounds.width, dateLabel.bounds.height)
     }
-
+    
+    override func shouldAutorotate() -> Bool {
+        return true
+    }
+    
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.Landscape
+        return [UIInterfaceOrientationMask.LandscapeLeft,UIInterfaceOrientationMask.LandscapeRight]
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -226,12 +233,27 @@ extension PanoViewController: UIWebViewDelegate {
             print("JS Error: \(exception)")
         }
         
-        // Setup a callback function for javascript to call after fetching panorama date
+        /** Setup a callback function for javascript to call after fetching panorama date **/
         let updateDateLabel: @convention(block) String -> () = { inputString in
-            self.dateLabel.text = self.getDateLabelString(inputString)
-            if (self.dateLabel.alpha == 0) {
-                UIView.animateWithDuration(0.5) {
-                    self.dateLabel.alpha = 0.7
+            dispatch_async(dispatch_get_main_queue()) {
+                // Update date label text, fade in date label if previously hidden
+                self.dateLabel.text = self.getDateLabelString(inputString)
+                if (self.dateLabel.alpha == 0) {
+                    UIView.animateWithDuration(self.datelabelAnimateDuration) {
+                        self.dateLabel.alpha = self.dateLabelTargetAlpha
+                    }
+                }
+            }
+            // Prepare a dispatch_after block, increment counter to keep track of in-flight dispatches
+            self.dispatchCount += 1
+            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(self.dateLabelFadeOutDelay * Double(NSEC_PER_SEC)))
+            dispatch_after(delayTime, dispatch_get_main_queue()) {
+                // Decrement dispatch counter, fade out date label if we are the last block
+                self.dispatchCount -= 1
+                if (self.dispatchCount == 0) {
+                    UIView.animateWithDuration(self.datelabelAnimateDuration) {
+                        self.dateLabel.alpha = 0
+                    }
                 }
             }
         }
@@ -256,8 +278,8 @@ extension PanoViewController: UIWebViewDelegate {
     }
     
     func getDateLabelString(oldString: String) -> String {
-        if (panoIds.count > 1) {
-            let dateComponents = oldString.characters.split{$0 == "-"}.map(String.init)
+        let dateComponents = oldString.characters.split{$0 == "-"}.map(String.init)
+        if (dateComponents.count == 2) {
             let yearString = dateComponents[0]
             let monthString = months[Int(dateComponents[1])! - 1]
             return monthString + " " + yearString
@@ -269,20 +291,6 @@ extension PanoViewController: UIWebViewDelegate {
 
 extension PanoViewController: GMSPanoramaViewDelegate {
     func panoramaView(view: GMSPanoramaView!, willMoveToPanoramaID panoramaID: String!) {
-        if (context != nil) {
-            let scriptString = "sv.getPanorama({pano: '\(panoramaID)'}, processSVData);"
-            context.evaluateScript(scriptString)
-        }
-    }
-    
-    func panoramaView(view: GMSPanoramaView!, error: NSError!, onMoveToPanoramaID panoramaID: String!) {
-        if (context != nil) {
-            let scriptString = "sv.getPanorama({pano: '\(panoramaID)'}, processSVData);"
-            context.evaluateScript(scriptString)
-        }
-    }
-    
-    func panoramaView(view: GMSPanoramaView!, error: NSError!, didMoveToPanoramaID panoramaID: String!) {
         if (context != nil) {
             let scriptString = "sv.getPanorama({pano: '\(panoramaID)'}, processSVData);"
             context.evaluateScript(scriptString)
