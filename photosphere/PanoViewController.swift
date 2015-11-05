@@ -35,12 +35,24 @@ class PanoViewController: UIViewController {
     
     /** Date Label **/
     var dateLabel: UILabel!
-    var dateLabelOffsetY: CGFloat = 10
+    var dateLabelOffsetY: CGFloat = 220
+    var dateLabelWidth: CGFloat = 120
+    var dateLabelHeight: CGFloat = 50
     var dateLabelTargetAlpha: CGFloat = 0.7
-    var datelabelAnimateDuration: Double = 0.5
+    var dateLabelAnimateDuration: Double = 0.5
     var dateLabelFadeOutDelay: Double = 2.0
-    var dispatchCount: Int = 0              // Keep track of in flight dispatches to only fade date label on last dispatch
+    var dateDispatchCount: Int = 0              // Keep track of in flight dispatches to only fade date label on last dispatch
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    
+    /** Location Label **/
+    var locationLabel: UILabel!
+    var locationLabelOffsetY: CGFloat = 10
+    var locationLabelWidth: CGFloat = 350
+    var locationLabelHeight: CGFloat = 50
+    var locationLabelTargetAlpha: CGFloat = 0.7
+    var locationLabelAnimateDuration: Double = 0.5
+    var locationLabelFadeOutDelay: Double = 2.0
+    var locationDispatchCount: Int = 0
     
     /** Core Motion Variables **/
     var motionManager: CMMotionManager!
@@ -170,7 +182,7 @@ class PanoViewController: UIViewController {
         self.view.addSubview(backButton)
         
         // Initialize date label
-        dateLabel = UILabel(frame: CGRectMake(150, dateLabelOffsetY, 120, 50))
+        dateLabel = UILabel(frame: CGRectMake(150, dateLabelOffsetY, dateLabelWidth, dateLabelHeight))
         dateLabel.backgroundColor = UIColor.blackColor()
         dateLabel.alpha = 0
         dateLabel.layer.cornerRadius = 3
@@ -179,6 +191,18 @@ class PanoViewController: UIViewController {
         dateLabel.textAlignment = NSTextAlignment.Center
         dateLabel.textColor = UIColor.whiteColor()
         self.view.addSubview(dateLabel)
+        
+        // Initialize location label
+        locationLabel = UILabel(frame: CGRectMake(150, locationLabelOffsetY, locationLabelWidth, locationLabelHeight))
+        locationLabel.backgroundColor = UIColor.blackColor()
+        locationLabel.alpha = 0
+        locationLabel.layer.cornerRadius = 3
+        locationLabel.clipsToBounds = true
+        locationLabel.font = UIFont(name: "HelveticaNeue", size: 18)
+        locationLabel.textAlignment = NSTextAlignment.Center
+        locationLabel.textColor = UIColor.whiteColor()
+        locationLabel.adjustsFontSizeToFitWidth = true
+        self.view.addSubview(locationLabel)
     }
 
     override func viewWillLayoutSubviews() {
@@ -191,6 +215,9 @@ class PanoViewController: UIViewController {
         
         // Layout date label
         dateLabel.frame = CGRectMake((self.view.bounds.width - dateLabel.bounds.width)/2, dateLabelOffsetY, dateLabel.bounds.width, dateLabel.bounds.height)
+        
+        // Layout location label
+        locationLabel.frame = CGRectMake((self.view.bounds.width - locationLabel.bounds.width)/2, locationLabelOffsetY, locationLabel.bounds.width, locationLabel.bounds.height)
     }
     
     override func shouldAutorotate() -> Bool {
@@ -235,32 +262,62 @@ extension PanoViewController: UIWebViewDelegate {
         
         /** Setup a callback function for javascript to call after fetching panorama date **/
         let updateDateLabel: @convention(block) String -> () = { inputString in
-            dispatch_async(dispatch_get_main_queue()) {
-                // Update date label text, fade in date label if previously hidden
-                self.dateLabel.text = self.getDateLabelString(inputString)
-                if (self.dateLabel.alpha == 0) {
-                    UIView.animateWithDuration(self.datelabelAnimateDuration) {
-                        self.dateLabel.alpha = self.dateLabelTargetAlpha
+            let dateString = self.getDateLabelString(inputString)
+            if (self.dateLabel.text != dateString) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    // Update date label text, fade in date label if previously hidden
+                    self.dateLabel.text = dateString
+                    if (self.dateLabel.alpha == 0) {
+                        UIView.animateWithDuration(self.dateLabelAnimateDuration) {
+                            self.dateLabel.alpha = self.dateLabelTargetAlpha
+                        }
                     }
                 }
-            }
-            // Prepare a dispatch_after block, increment counter to keep track of in-flight dispatches
-            self.dispatchCount += 1
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(self.dateLabelFadeOutDelay * Double(NSEC_PER_SEC)))
-            dispatch_after(delayTime, dispatch_get_main_queue()) {
-                // Decrement dispatch counter, fade out date label if we are the last block
-                self.dispatchCount -= 1
-                if (self.dispatchCount == 0) {
-                    UIView.animateWithDuration(self.datelabelAnimateDuration) {
-                        self.dateLabel.alpha = 0
+                // Prepare a dispatch_after block, increment counter to keep track of in-flight dispatches
+                self.dateDispatchCount += 1
+                let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(self.dateLabelFadeOutDelay * Double(NSEC_PER_SEC)))
+                dispatch_after(delayTime, dispatch_get_main_queue()) {
+                    // Decrement dispatch counter, fade out date label if we are the last block
+                    self.dateDispatchCount -= 1
+                    if (self.dateDispatchCount == 0) {
+                        UIView.animateWithDuration(self.dateLabelAnimateDuration) {
+                            self.dateLabel.alpha = 0
+                        }
                     }
                 }
             }
         }
         context.setObject(unsafeBitCast(updateDateLabel, AnyObject.self), forKeyedSubscript: "updateDateLabel")
         
+        let updateLocationLabel: @convention(block) String -> () = { inputString in
+            if (self.locationLabel.text != inputString) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    // Update date label text, fade in date label if previously hidden
+                    self.locationLabel.text = inputString
+                    if (self.locationLabel.alpha == 0) {
+                        UIView.animateWithDuration(self.locationLabelAnimateDuration) {
+                            self.locationLabel.alpha = self.locationLabelTargetAlpha
+                        }
+                    }
+                }
+                // Prepare a dispatch_after block, increment counter to keep track of in-flight dispatches
+                self.locationDispatchCount += 1
+                let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(self.locationLabelFadeOutDelay * Double(NSEC_PER_SEC)))
+                dispatch_after(delayTime, dispatch_get_main_queue()) {
+                    // Decrement dispatch counter, fade out date label if we are the last block
+                    self.locationDispatchCount -= 1
+                    if (self.locationDispatchCount == 0) {
+                        UIView.animateWithDuration(self.locationLabelAnimateDuration) {
+                            self.locationLabel.alpha = 0
+                        }
+                    }
+                }
+            }
+        }
+        context.setObject(unsafeBitCast(updateLocationLabel, AnyObject.self), forKeyedSubscript: "updateLocationLabel")
+        
         // Set up a callback function in javascript that calls the above callback function
-        let funcString = "function processSVData(data, status) {  if (status === google.maps.StreetViewStatus.OK) { updateDateLabel(data.imageDate) } }"
+        let funcString = "function processSVData(data, status) {  if (status === google.maps.StreetViewStatus.OK) { updateDateLabel(data.imageDate); updateLocationLabel(data.location.description); } }"
         context.evaluateScript(funcString)
         
         // Initialize an instance of StreetViewService
