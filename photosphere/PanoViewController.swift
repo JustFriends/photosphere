@@ -21,7 +21,7 @@ class PanoViewController: UIViewController {
     var sliderView: UISlider!
     let sliderOffsetX: CGFloat = 80
     let sliderOffsetY: CGFloat = 40
-    let sliderHeight: CGFloat = 15
+    let sliderHeight: CGFloat = 20
     
     /** Back Button **/
     var backButton: UIButton!
