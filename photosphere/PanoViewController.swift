@@ -64,9 +64,9 @@ class PanoViewController: UIViewController {
     /** Lat/Lng Viewer Coordinates **/
     var coordinate: CLLocationCoordinate2D? {
         didSet {
+            let searchLocation = PFGeoPoint(latitude: coordinate!.latitude, longitude: coordinate!.longitude)
             let query = PFQuery(className:"PanoData")
-            query.whereKey("latitude", equalTo: coordinate!.latitude)
-            query.whereKey("longitude", equalTo: coordinate!.longitude)
+            query.whereKey("location", nearGeoPoint: searchLocation, withinMiles: 0.1)
             query.findObjectsInBackgroundWithBlock { (objects: [PFObject]?, error: NSError?) -> Void in
                 if error == nil {
                     self.dateLabel.alpha = 0
