@@ -35,7 +35,7 @@ class PanoViewController: UIViewController {
     
     /** Date Label **/
     var dateLabel: UILabel!
-    var dateLabelOffsetY: CGFloat = 220
+    var dateLabelOffsetY: CGFloat = 30
     var dateLabelWidth: CGFloat = 120
     var dateLabelHeight: CGFloat = 50
     var dateLabelTargetAlpha: CGFloat = 0.7
@@ -156,9 +156,6 @@ class PanoViewController: UIViewController {
                     self!.lastYaw = yaw
                     
                     dispatch_async(dispatch_get_main_queue()) {
-//                        print("r:\(roll), p:\(pitch), y:\(self!.viewerYaw)")
-//                        print("gx:\(motion!.gravity.x), gy:\(motion!.gravity.y), gz:\(motion!.gravity.z)")
-                        
                         // Update panorama viewer camera
                         let viewerHeading = self!.viewerYaw + (gx > 0 ? 180 : 0)
                         let viewerPitch = gx * roll - 90
@@ -185,7 +182,7 @@ class PanoViewController: UIViewController {
         dateLabel = UILabel(frame: CGRectMake(150, dateLabelOffsetY, dateLabelWidth, dateLabelHeight))
         dateLabel.backgroundColor = UIColor.blackColor()
         dateLabel.alpha = 0
-        dateLabel.layer.cornerRadius = 3
+        dateLabel.layer.cornerRadius = 4
         dateLabel.clipsToBounds = true
         dateLabel.font = UIFont(name: "HelveticaNeue", size: 18)
         dateLabel.textAlignment = NSTextAlignment.Center
@@ -196,7 +193,7 @@ class PanoViewController: UIViewController {
         locationLabel = UILabel(frame: CGRectMake(150, locationLabelOffsetY, locationLabelWidth, locationLabelHeight))
         locationLabel.backgroundColor = UIColor.blackColor()
         locationLabel.alpha = 0
-        locationLabel.layer.cornerRadius = 3
+        locationLabel.layer.cornerRadius = 4
         locationLabel.clipsToBounds = true
         locationLabel.font = UIFont(name: "HelveticaNeue", size: 18)
         locationLabel.textAlignment = NSTextAlignment.Center
@@ -214,7 +211,7 @@ class PanoViewController: UIViewController {
             self.view.bounds.width - 2 * sliderOffsetX, sliderHeight)
         
         // Layout date label
-        dateLabel.frame = CGRectMake((self.view.bounds.width - dateLabel.bounds.width)/2, dateLabelOffsetY, dateLabel.bounds.width, dateLabel.bounds.height)
+        dateLabel.frame = CGRectMake((self.view.bounds.width - dateLabel.bounds.width)/2, CGRectGetMaxY(sliderView.frame) - (dateLabel.bounds.height + dateLabelOffsetY), dateLabel.bounds.width, dateLabel.bounds.height)
         
         // Layout location label
         locationLabel.frame = CGRectMake((self.view.bounds.width - locationLabel.bounds.width)/2, locationLabelOffsetY, locationLabel.bounds.width, locationLabel.bounds.height)
