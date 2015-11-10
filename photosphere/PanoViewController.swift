@@ -16,6 +16,7 @@ class PanoViewController: UIViewController {
     
     /** Panorama Viewer **/
     var panoView: GMSPanoramaView!
+    var panoView2: GMSPanoramaView!
     
     /** UISlider for Transitioning Panoramas **/
     var sliderView: UISlider!
@@ -77,6 +78,10 @@ class PanoViewController: UIViewController {
                         self.panoView.navigationGestures = false
                         self.panoView.moveToPanoramaID(self.panoIds[self.curPanoIdx])
                         
+                        self.panoView2.navigationLinksHidden = true
+                        self.panoView2.navigationGestures = false
+                        self.panoView2.moveToPanoramaID(self.panoIds[self.curPanoIdx])
+                        
                         self.sliderView.hidden = false
                         self.sliderView.maximumValue = Float(self.panoIds.count - 1)
                         self.sliderView.value = self.sliderView.minimumValue
@@ -123,6 +128,12 @@ class PanoViewController: UIViewController {
         panoView.navigationLinksHidden = true
         panoView.delegate = self
         self.view.addSubview(panoView)
+        
+        panoView2 = GMSPanoramaView()
+        panoView2.streetNamesHidden = true
+        panoView2.navigationLinksHidden = true
+        panoView2.delegate = self
+        self.view.addSubview(panoView2)
 
         // Set panorama camera to update with device motion (if motion sensors are available)
         motionManager = CMMotionManager()
@@ -160,6 +171,7 @@ class PanoViewController: UIViewController {
                         let viewerHeading = self!.viewerYaw + (gx > 0 ? 180 : 0)
                         let viewerPitch = gx * roll - 90
                         self!.panoView.camera = GMSPanoramaCamera(heading: viewerHeading, pitch:viewerPitch, zoom:1)
+                        self!.panoView2.camera = GMSPanoramaCamera(heading: viewerHeading, pitch:viewerPitch, zoom:1)
                     }
                 }
             })
@@ -205,6 +217,7 @@ class PanoViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         // Layout panorama viewer
         panoView.frame = self.view.bounds
+        panoView2.frame = self.view.bounds
         
         // Layout slider
         sliderView.frame = CGRectMake(CGRectGetMinX(self.view.bounds) + sliderOffsetX, CGRectGetMaxY(self.view.bounds) - sliderOffsetY,
@@ -229,6 +242,11 @@ class PanoViewController: UIViewController {
         self.view.setNeedsLayout()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        panoView.alpha = 0
+        panoView2.alpha = 0
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -237,7 +255,19 @@ class PanoViewController: UIViewController {
     func sliderValueChanged(slider: UISlider) -> () {
         let curIdx = Int(round(slider.value))
         if curIdx != curPanoIdx {
-            panoView.moveToPanoramaID(panoIds[curIdx])
+            var activeView: GMSPanoramaView!
+            var otherView: GMSPanoramaView!
+            if panoView.alpha < 1 {
+                activeView = panoView2
+                otherView = panoView
+            } else {
+                activeView = panoView
+                otherView = panoView2
+            }
+            otherView.moveToPanoramaID(panoIds[curIdx])
+            UIView.animateWithDuration(0.5) {
+                activeView.alpha = 0
+            }
             curPanoIdx = curIdx
             if (context != nil) {
                 let scriptString = "sv.getPanorama({pano: '\(panoIds[curIdx])'}, processSVData);"
@@ -348,6 +378,12 @@ extension PanoViewController: GMSPanoramaViewDelegate {
         if (context != nil) {
             let scriptString = "sv.getPanorama({pano: '\(panoramaID)'}, processSVData);"
             context.evaluateScript(scriptString)
+        }
+    }
+    
+    func panoramaView(view: GMSPanoramaView!, didMoveToPanorama panorama: GMSPanorama!) {
+        UIView.animateWithDuration(0.5) {
+            view.alpha = 1
         }
     }
 }
