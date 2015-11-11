@@ -257,7 +257,7 @@ class PanoViewController: UIViewController {
         if curIdx != curPanoIdx {
             var activeView: GMSPanoramaView!
             var otherView: GMSPanoramaView!
-            if panoView.alpha < 1 {
+            if panoView.alpha <= panoView2.alpha {
                 activeView = panoView2
                 otherView = panoView
             } else {
