@@ -192,13 +192,12 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
                 let object = self.placesArray[i]
                 //print(object)
                 //print(object)
-                let lat = object["latitude"]
-                let long = object["longitude"]
+                let location = object["location"] as! PFGeoPoint
                 let view = UIImageView(frame: CGRectMake(CGFloat(i)*pageWidth, 0, pageWidth, pageHeight))
                 if (object.objectForKey("previewImageURL") != nil) {
                     view.setImageWithURL(NSURL(string: object["previewImageURL"] as! String)!)
                 } else {
-                    view.setImageWithURL(NSURL(string: "https://maps.googleapis.com/maps/api/streetview?location=\(lat),\(long)&size=\(Int(pageWidth))x\(Int(pageHeight))")!)
+                    view.setImageWithURL(NSURL(string: "https://maps.googleapis.com/maps/api/streetview?location=\(location.latitude),\(location.longitude)&size=\(Int(pageWidth))x\(Int(pageHeight))")!)
                 }
 
                 //print(urlString)
@@ -301,8 +300,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         //print("current page \(pageControl.currentPage)")
         if self.placesArray.count != 0 {
             let place = self.placesArray[pageControl.currentPage]
+            let location = place["location"] as! PFGeoPoint
             //print(place)
-            self.coordinate = CLLocationCoordinate2DMake(place["latitude"] as! CLLocationDegrees, place["longitude"] as! CLLocationDegrees)
+            self.coordinate = CLLocationCoordinate2DMake(location.latitude as! CLLocationDegrees, location.longitude as! CLLocationDegrees)
         }
         //print("tapped")
         //get coordinates from page clicked here
