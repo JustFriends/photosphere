@@ -43,6 +43,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         view.addSubview(pageControl)
 
         self.mapsButton = UIButton(type:UIButtonType.System) as UIButton
+        self.mapsButton.tintColor = UIColor.whiteColor()
         self.view.addSubview(self.mapsButton)
 
         placesClient = GMSPlacesClient()
