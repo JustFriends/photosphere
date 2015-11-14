@@ -274,7 +274,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     }
     
     func tapMapsButton(recognizer: UITapGestureRecognizer) {
-        requestLocation(40.712584,long: -74.014265)
+        requestLocation(38.8977,long: -77.0366)
         //requestLocation(40.71288,long:-74.0140183)
         //print("tapped map")
         //get coordinates from page clicked here
