@@ -16,6 +16,7 @@ class PanoViewController: UIViewController {
     
     /** Panorama Viewer **/
     var panoView: GMSPanoramaView!
+    var panoView2: GMSPanoramaView!
     
     /** UISlider for Transitioning Panoramas **/
     var sliderView: UISlider!
@@ -35,7 +36,7 @@ class PanoViewController: UIViewController {
     
     /** Date Label **/
     var dateLabel: UILabel!
-    var dateLabelOffsetY: CGFloat = 220
+    var dateLabelOffsetY: CGFloat = 30
     var dateLabelWidth: CGFloat = 120
     var dateLabelHeight: CGFloat = 50
     var dateLabelTargetAlpha: CGFloat = 0.7
@@ -64,9 +65,9 @@ class PanoViewController: UIViewController {
     /** Lat/Lng Viewer Coordinates **/
     var coordinate: CLLocationCoordinate2D? {
         didSet {
+            let searchLocation = PFGeoPoint(latitude: coordinate!.latitude, longitude: coordinate!.longitude)
             let query = PFQuery(className:"PanoData")
-            query.whereKey("latitude", equalTo: coordinate!.latitude)
-            query.whereKey("longitude", equalTo: coordinate!.longitude)
+            query.whereKey("location", nearGeoPoint: searchLocation, withinMiles: 0.1)
             query.findObjectsInBackgroundWithBlock { (objects: [PFObject]?, error: NSError?) -> Void in
                 if error == nil {
                     self.dateLabel.alpha = 0
@@ -76,6 +77,10 @@ class PanoViewController: UIViewController {
                         self.panoView.navigationLinksHidden = true
                         self.panoView.navigationGestures = false
                         self.panoView.moveToPanoramaID(self.panoIds[self.curPanoIdx])
+                        
+                        self.panoView2.navigationLinksHidden = true
+                        self.panoView2.navigationGestures = false
+                        self.panoView2.moveToPanoramaID(self.panoIds[self.curPanoIdx])
                         
                         self.sliderView.hidden = false
                         self.sliderView.maximumValue = Float(self.panoIds.count - 1)
@@ -123,6 +128,12 @@ class PanoViewController: UIViewController {
         panoView.navigationLinksHidden = true
         panoView.delegate = self
         self.view.addSubview(panoView)
+        
+        panoView2 = GMSPanoramaView()
+        panoView2.streetNamesHidden = true
+        panoView2.navigationLinksHidden = true
+        panoView2.delegate = self
+        self.view.addSubview(panoView2)
 
         // Set panorama camera to update with device motion (if motion sensors are available)
         motionManager = CMMotionManager()
@@ -156,13 +167,11 @@ class PanoViewController: UIViewController {
                     self!.lastYaw = yaw
                     
                     dispatch_async(dispatch_get_main_queue()) {
-//                        print("r:\(roll), p:\(pitch), y:\(self!.viewerYaw)")
-//                        print("gx:\(motion!.gravity.x), gy:\(motion!.gravity.y), gz:\(motion!.gravity.z)")
-                        
                         // Update panorama viewer camera
                         let viewerHeading = self!.viewerYaw + (gx > 0 ? 180 : 0)
                         let viewerPitch = gx * roll - 90
                         self!.panoView.camera = GMSPanoramaCamera(heading: viewerHeading, pitch:viewerPitch, zoom:1)
+                        self!.panoView2.camera = GMSPanoramaCamera(heading: viewerHeading, pitch:viewerPitch, zoom:1)
                     }
                 }
             })
@@ -185,7 +194,7 @@ class PanoViewController: UIViewController {
         dateLabel = UILabel(frame: CGRectMake(150, dateLabelOffsetY, dateLabelWidth, dateLabelHeight))
         dateLabel.backgroundColor = UIColor.blackColor()
         dateLabel.alpha = 0
-        dateLabel.layer.cornerRadius = 3
+        dateLabel.layer.cornerRadius = 4
         dateLabel.clipsToBounds = true
         dateLabel.font = UIFont(name: "HelveticaNeue", size: 18)
         dateLabel.textAlignment = NSTextAlignment.Center
@@ -196,7 +205,7 @@ class PanoViewController: UIViewController {
         locationLabel = UILabel(frame: CGRectMake(150, locationLabelOffsetY, locationLabelWidth, locationLabelHeight))
         locationLabel.backgroundColor = UIColor.blackColor()
         locationLabel.alpha = 0
-        locationLabel.layer.cornerRadius = 3
+        locationLabel.layer.cornerRadius = 4
         locationLabel.clipsToBounds = true
         locationLabel.font = UIFont(name: "HelveticaNeue", size: 18)
         locationLabel.textAlignment = NSTextAlignment.Center
@@ -208,13 +217,14 @@ class PanoViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         // Layout panorama viewer
         panoView.frame = self.view.bounds
+        panoView2.frame = self.view.bounds
         
         // Layout slider
         sliderView.frame = CGRectMake(CGRectGetMinX(self.view.bounds) + sliderOffsetX, CGRectGetMaxY(self.view.bounds) - sliderOffsetY,
             self.view.bounds.width - 2 * sliderOffsetX, sliderHeight)
         
         // Layout date label
-        dateLabel.frame = CGRectMake((self.view.bounds.width - dateLabel.bounds.width)/2, dateLabelOffsetY, dateLabel.bounds.width, dateLabel.bounds.height)
+        dateLabel.frame = CGRectMake((self.view.bounds.width - dateLabel.bounds.width)/2, CGRectGetMaxY(sliderView.frame) - (dateLabel.bounds.height + dateLabelOffsetY), dateLabel.bounds.width, dateLabel.bounds.height)
         
         // Layout location label
         locationLabel.frame = CGRectMake((self.view.bounds.width - locationLabel.bounds.width)/2, locationLabelOffsetY, locationLabel.bounds.width, locationLabel.bounds.height)
@@ -232,6 +242,11 @@ class PanoViewController: UIViewController {
         self.view.setNeedsLayout()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        panoView.alpha = 0
+        panoView2.alpha = 0
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -240,7 +255,19 @@ class PanoViewController: UIViewController {
     func sliderValueChanged(slider: UISlider) -> () {
         let curIdx = Int(round(slider.value))
         if curIdx != curPanoIdx {
-            panoView.moveToPanoramaID(panoIds[curIdx])
+            var activeView: GMSPanoramaView!
+            var otherView: GMSPanoramaView!
+            if panoView.alpha <= panoView2.alpha {
+                activeView = panoView2
+                otherView = panoView
+            } else {
+                activeView = panoView
+                otherView = panoView2
+            }
+            otherView.moveToPanoramaID(panoIds[curIdx])
+            UIView.animateWithDuration(0.5) {
+                activeView.alpha = 0
+            }
             curPanoIdx = curIdx
             if (context != nil) {
                 let scriptString = "sv.getPanorama({pano: '\(panoIds[curIdx])'}, processSVData);"
@@ -351,6 +378,12 @@ extension PanoViewController: GMSPanoramaViewDelegate {
         if (context != nil) {
             let scriptString = "sv.getPanorama({pano: '\(panoramaID)'}, processSVData);"
             context.evaluateScript(scriptString)
+        }
+    }
+    
+    func panoramaView(view: GMSPanoramaView!, didMoveToPanorama panorama: GMSPanorama!) {
+        UIView.animateWithDuration(0.5) {
+            view.alpha = 1
         }
     }
 }
