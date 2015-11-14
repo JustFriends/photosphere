@@ -28,7 +28,7 @@ class PanoViewController: UIViewController {
     var backButton: UIButton!
     let buttonOffsetX: CGFloat = 10
     let buttonOffsetY: CGFloat = 10
-    let buttonSideLength: CGFloat = 40
+    let buttonSideLength: CGFloat = 60
     
     /** UIWebView for Javascript Queries **/
     var webView: UIWebView!
@@ -187,6 +187,7 @@ class PanoViewController: UIViewController {
         backButton = UIButton(frame: CGRectMake(buttonOffsetX, buttonOffsetY, buttonSideLength, buttonSideLength))
         let backImage = UIImage(named:"backIcon-1")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
         backButton.setImage(backImage, forState: UIControlState.Normal)
+        backButton.tintColor = UIColor.whiteColor()
         backButton.addTarget(self, action: "backButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backButton)
         
