@@ -94,7 +94,6 @@ class PanoViewController: UIViewController {
                             self.context.evaluateScript(scriptString)
                         }
                         
-                        
                         for marker in self.markersArray {
                             marker.panoramaView = nil
                         }
@@ -109,6 +108,7 @@ class PanoViewController: UIViewController {
                                     let position = CLLocationCoordinate2DMake(location.latitude, location.longitude)
                                     let marker = GMSMarker(position: position)
                                     marker.tappable = true
+                                    marker.snippet = entry["imageURL"] as! String
                                     self.markersArray.append(marker)
                                 }
                             }
@@ -418,7 +418,7 @@ extension PanoViewController: GMSPanoramaViewDelegate {
     }
     
     func panoramaView(panoramaView: GMSPanoramaView!, didTapMarker marker: GMSMarker!) -> Bool {
-        let url = NSURL(string: "http://www.whatwasthere.com/images/uploads/screen/Photo_838.jpg")
+        let url = NSURL(string: marker.snippet)
         let urlRequest = NSURLRequest(URL: url!)
         let requestOperation = AFHTTPRequestOperation(request: urlRequest)
         requestOperation.responseSerializer = AFImageResponseSerializer()
