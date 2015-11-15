@@ -49,6 +49,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         placesClient = GMSPlacesClient()
 
         let query = PFQuery(className:"PanoData")
+        query.orderByDescending("updatedAt")
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
 
