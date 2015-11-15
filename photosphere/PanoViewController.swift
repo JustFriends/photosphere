@@ -76,7 +76,7 @@ class PanoViewController: UIViewController {
                     self.dateLabel.alpha = 0
                     if let entry = objects?.first as PFObject! {
                         self.panoIds = entry["panoIds"] as! [String]
-                        self.curPanoIdx = 0
+                        self.curPanoIdx = self.panoIds.count - 1
                         self.panoView.navigationLinksHidden = true
                         self.panoView.navigationGestures = false
                         self.panoView.moveToPanoramaID(self.panoIds[self.curPanoIdx])
@@ -87,7 +87,7 @@ class PanoViewController: UIViewController {
                         
                         self.sliderView.hidden = false
                         self.sliderView.maximumValue = Float(self.panoIds.count - 1)
-                        self.sliderView.value = self.sliderView.minimumValue
+                        self.sliderView.value = self.sliderView.maximumValue
                         
                         if (self.context != nil) {
                             let scriptString = "sv.getPanorama({pano: '\(self.panoIds[self.curPanoIdx])'}, processSVData);"
