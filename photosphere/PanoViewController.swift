@@ -55,6 +55,9 @@ class PanoViewController: UIViewController {
     var locationLabelFadeOutDelay: Double = 2.0
     var locationDispatchCount: Int = 0
     
+    /** Markers **/
+    var markersArray: [GMSMarker]!
+    
     /** Core Motion Variables **/
     var motionManager: CMMotionManager!
     let FRAMES_PER_SECOND: Double = 30.0    // How often we update the camera
@@ -89,6 +92,26 @@ class PanoViewController: UIViewController {
                         if (self.context != nil) {
                             let scriptString = "sv.getPanorama({pano: '\(self.panoIds[self.curPanoIdx])'}, processSVData);"
                             self.context.evaluateScript(scriptString)
+                        }
+                        
+                        
+                        for marker in self.markersArray {
+                            marker.panoramaView = nil
+                        }
+                        self.markersArray.removeAll()
+                        
+                        let imageQuery = PFQuery(className:"ImageData")
+                        imageQuery.whereKey("location", nearGeoPoint: searchLocation, withinMiles: 1)
+                        imageQuery.findObjectsInBackgroundWithBlock { (objects: [PFObject]?, error: NSError?) -> Void in
+                            if error == nil && objects?.count > 0{
+                                for entry in objects! {
+                                    let location = entry["location"] as! PFGeoPoint
+                                    let position = CLLocationCoordinate2DMake(location.latitude, location.longitude)
+                                    let marker = GMSMarker(position: position)
+                                    marker.tappable = true
+                                    self.markersArray.append(marker)
+                                }
+                            }
                         }
                     } else {
                         self.panoIds = []
@@ -213,6 +236,8 @@ class PanoViewController: UIViewController {
         locationLabel.textColor = UIColor.whiteColor()
         locationLabel.adjustsFontSizeToFitWidth = true
         self.view.addSubview(locationLabel)
+        
+        markersArray = [GMSMarker]()
     }
 
     override func viewWillLayoutSubviews() {
@@ -383,8 +408,31 @@ extension PanoViewController: GMSPanoramaViewDelegate {
     }
     
     func panoramaView(view: GMSPanoramaView!, didMoveToPanorama panorama: GMSPanorama!) {
+        for marker in markersArray {
+            marker.panoramaView = view
+        }
         UIView.animateWithDuration(0.5) {
             view.alpha = 1
+        }
+    }
+    
+    func panoramaView(panoramaView: GMSPanoramaView!, didTapMarker marker: GMSMarker!) -> Bool {
+        let url = NSURL(string: "http://www.whatwasthere.com/images/uploads/screen/Photo_838.jpg")
+        let urlRequest = NSURLRequest(URL: url!)
+        let requestOperation = AFHTTPRequestOperation(request: urlRequest)
+        requestOperation.responseSerializer = AFImageResponseSerializer()
+        requestOperation.setCompletionBlockWithSuccess({ (operation, responseObject) -> Void in
+            marker.icon = responseObject as! UIImage
+            }) { (operation, error) -> Void in
+                print(error)
+        }
+        requestOperation.start()
+        return true
+    }
+    
+    func panoramaView(panoramaView: GMSPanoramaView!, didTap point: CGPoint) {
+        for marker in markersArray! {
+            marker.icon = nil
         }
     }
 }
