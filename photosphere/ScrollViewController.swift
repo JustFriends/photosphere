@@ -241,7 +241,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         mapsButton.frame = frame
         
         //add image
-        let image = UIImage(named: "globe") as UIImage?
+        let image = UIImage(named: "globe-1") as UIImage?
 
         mapsButton.setImage(image, forState: .Normal)
         
