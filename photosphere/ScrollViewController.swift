@@ -169,20 +169,21 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
         if (self.placesArray.count == 0) {
             //print("nil places array")
             //let view1 = UIView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
-            let view1 = UIImageView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
+            let view1 = UIView(frame: CGRectMake(0, 0, pageWidth, pageHeight))
+            view1.backgroundColor = UIColor.whiteColor()
 
             let urlString = "https://maps.googleapis.com/maps/api/streetview?location=37.7737729,-122.408536&size=\(Int(pageWidth))x\(Int(pageHeight))"
             //print(urlString)
-            view1.setImageWithURL(NSURL(string: urlString)!)
+            //view1.setImageWithURL(NSURL(string: urlString)!)
             //view1.setImageWithURL(NSURL(string: "https://maps.googleapis.com/maps/api/streetview?location=37.7737729,-122.408536&size=375x667")!)
 
             //view1.backgroundColor = UIColor(patternImage: UIImage(named: "8th&Harrison")!)
             //view1.backgroundColor = UIColor.blueColor()
 
             let view2 = UIView(frame: CGRectMake(pageWidth, 0, pageWidth, pageHeight))
-            view2.backgroundColor = UIColor.orangeColor()
+            view2.backgroundColor = UIColor.whiteColor()
             let view3 = UIView(frame: CGRectMake(2*pageWidth, 0, pageWidth, pageHeight))
-            view3.backgroundColor = UIColor.purpleColor()
+            view3.backgroundColor = UIColor.whiteColor()
 
             scrollView.addSubview(view1)
             scrollView.addSubview(view2)
