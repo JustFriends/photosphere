@@ -228,7 +228,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
 
         let size = CGFloat(45)
         let screenWidth = self.view.frame.size.width
-        pageControl.frame = CGRectMake((screenWidth / 2) - (size / 2), UIScreen.mainScreen().bounds.height-75, size, size)
+        pageControl.frame = CGRectMake((screenWidth / 2) - (size / 2), UIScreen.mainScreen().bounds.height-35, size, size)
         pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
     }
     
@@ -254,7 +254,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, MapViewContr
     func addLabelToImageView(string: String, imageView: UIImageView) {
         let size = CGFloat(250)
         let screenWidth = self.view.frame.size.width
-        let frame = CGRectMake((0), UIScreen.mainScreen().bounds.height-65, screenWidth, 65)
+        let frame = CGRectMake((0), UIScreen.mainScreen().bounds.height-70, screenWidth, 70)
 
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         visualEffectView.frame = frame
