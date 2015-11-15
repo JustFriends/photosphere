@@ -179,6 +179,7 @@ class PanoViewController: UIViewController {
         
         // Initialize slider
         sliderView = UISlider()
+        sliderView.tintColor = UIColor.whiteColor()
         sliderView.minimumValue = 0
         sliderView.addTarget(self, action: "sliderValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         self.view.addSubview(sliderView)
